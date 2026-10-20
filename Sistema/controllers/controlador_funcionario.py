@@ -11,20 +11,24 @@ class ControladorFuncionario:
         self.__funcionarios.append(funcionario) #adicionando o funcioanrio na lista de cadastrados
 
     def remover_funcionario(self, id) -> None:
-        funcionario = self.__buscar(id) #ira buscar e apagar
+        funcionario = self.buscar(id) #ira buscar e apagar
         self.__funcionarios.remove(funcionario)
 
     def atualizar_funcionario(self, id, nome=None, senha=None) -> None:
-        funcionario = self.__buscar(id)
+        funcionario = self.buscar(id)
         if nome is not None:
             funcionario.nome = nome
         if senha is not None:
             funcionario.alterar_senha(senha)
 
-    def __buscar(self, id) -> Funcionario:
+    def buscar(self, id=None, nome=None) -> Funcionario:
         for funcionario in self.__funcionarios:
-            if funcionario.id == id:
-                return funcionario
+            if id is not None:
+                if funcionario.id == id:
+                    return funcionario
+            if nome is not None:
+                if funcionario.nome == nome:
+                    return funcionario
         raise ValueError("Funcionário não encontrado.")
 
     def listar_funcionarios(self) -> None:
