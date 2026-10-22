@@ -6,7 +6,7 @@ from entities.extrato_conta import ExtratoConta
 from datetime import datetime
 
 
-from hospedagem import Hospedagem
+from entities.hospedagem import Hospedagem
 
 
 

@@ -1,6 +1,6 @@
-from quarto import quarto
+from entities.quarto.quarto import Quarto
 
-class QuartoDuplo(quarto.Quarto):
+class QuartoDuplo(Quarto):
     def __init__(self, numeroQuarto):
         super().__init__(numeroQuarto)
 
