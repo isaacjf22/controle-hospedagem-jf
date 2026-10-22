@@ -1,7 +1,7 @@
 from controllers.controlador_funcionario import ControladorFuncionario
 
 class ControladorLogin:
-    def __init__(self, ctlFuncionario):
+    def __init__(self, ctlFuncionario : ControladorFuncionario):
         self.__funcionarioLogado = None
         self.__ctlFuncionario = ctlFuncionario
 
@@ -13,7 +13,8 @@ class ControladorLogin:
     #métodos
     def login(self, nome, senha) -> None:
         funcionario = self.__ctlFuncionario.buscar(nome=nome) #pulando parametros
-        funcionario.verificar_senha(senha)
+        if not funcionario.verificar_senha(senha):
+            raise ValueError("Senha incorreta.")
         self.__funcionarioLogado = funcionario
 
     def logout(self) -> None:

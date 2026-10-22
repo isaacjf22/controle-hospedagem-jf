@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 from hospedagem import Hospedagem
-from pessoas.pessoa import Pessoa
+
 
 
 class ControladorHospedagem:
@@ -28,54 +28,36 @@ class ControladorHospedagem:
         quarto = self.__ctlQuarto.buscar_quarto(numeroQuarto)
 
         hospedagem = Hospedagem(next(self.__contador), entrada, saidaPrevista, cliente, quarto)
-        self.__hospedagensAtivas.append(hospedagem)
         quarto.ocupar()
+        self.__hospedagensAtivas.append(hospedagem)
 
-        comprovante = self.__gerar_comprovante(hospedagem)
-        return comprovante
+        return hospedagem.gerar_comprovante()
 
     def realizar_checkout(self, idHospedagem) -> ExtratoConta:
         hospedagem = self.__buscar_hospedagem(idHospedagem)
-        total = hospedagem.finalizar()
+        hospedagem.finalizar()
         self.__hospedagensAtivas.remove(hospedagem)
-        extrato = self.__gerar_extrato(idHospedagem)
 
-        return extrato
+        return hospedagem.gerar_extrato()
 
     def adicionar_consumo(self, idHospedagem ,nome, quantidade , valorUnitario):
         hospedagem = self.__buscar_hospedagem(idHospedagem)
-        hospedagem.adicionar_gasto(nome, quantidade, valorUnitario)
+        hospedagem.adicionar_gasto(nome, valorUnitario, quantidade)
 
     def concluir_limpeza(self, numeroQuarto):
         quarto = self.__ctlQuarto.buscar_quarto(numeroQuarto)
         quarto.concluir_limpeza()
 
     def listar_hospedagens_ativas(self):
-        for hospedagem in self.__hospedagensAtivas:
-            print(f"{hospedagem.id}) QUARTO: {hospedagem.numeroQuarto} / CLIENTE: {hospedagem.cliente.nome}")
-
-    def listar_clietes(self):
-        self.__ctlCliente.listar_clientes()
-
-    def listar_quartos(self):
-        self.__ctlQuarto.listar_quartos()
+        return self.__hospedagensAtivas
+        #for hospedagem in self.__hospedagensAtivas:
+         #   print(f"{hospedagem.id}) QUARTO: {hospedagem.quarto.numeroQuarto} / CLIENTE: {hospedagem.cliente.nome}")
 
     def __buscar_hospedagem(self, idHospedagem):
         for hospedagem in self.__hospedagensAtivas:
-            if hospedagem.idHospedagem == idHospedagem:
+            if hospedagem.id == idHospedagem:
                 return hospedagem
         raise ValueError("Hospedagem não encontrada.")
-
-
-
-
-    def __gerar_comprovante(self, idHospedagem) -> ComprovanteHospedagem:
-        hospedagem = self.__buscar_hospedagem(idHospedagem)
-        return hospedagem.gerar_comprovante()
-
-    def __gerar_extrato(self, idHospedagem):
-        hospedagem = self.__buscar_hospedagem(idHospedagem)
-        return hospedagem.gerar_extrato()
 
 
 

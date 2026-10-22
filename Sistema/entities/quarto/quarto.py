@@ -5,7 +5,7 @@ class Quarto(ABC):
     #construtor
     def __init__(self, numeroQuarto):
         self._numeroQuarto = numeroQuarto
-        self._statusQuarto = "LIVRE"
+        self._statusQuarto = Status.LIVRE
 
 
     #encapsulamento
@@ -28,6 +28,8 @@ class Quarto(ABC):
         self._statusQuarto = Status.LIMPEZA
 
     def ocupar(self):
+        if self._statusQuarto != Status.LIVRE:
+            raise("Só pode ocupar quarto que estiver LIVRE.")
         self._statusQuarto = Status.OCUPADO
 
     def concluir_limpeza(self):

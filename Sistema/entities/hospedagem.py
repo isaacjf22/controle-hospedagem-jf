@@ -2,8 +2,6 @@ from datetime import datetime
 from entities.comprovante_hospedagem import ComprovanteHospedagem
 from entities.extrato_conta import ExtratoConta
 from entities.gasto import Gasto
-from pessoas.pessoa import Pessoa
-
 
 class Hospedagem:
     def __init__(self, id, entrada : datetime, saidaPrevista : datetime, cliente , quarto ):
@@ -61,7 +59,7 @@ class Hospedagem:
 
     def __calcular_total(self, dias) -> float:
         total = 0
-        total += self.__quarto.calcular_total(dias)
+        total += self.__quarto.calcular_diaria(dias)
         for gasto in self.__gastos:
             total += gasto.calcular_total()
         return total
@@ -78,7 +76,7 @@ class Hospedagem:
             raise ValueError("A hospedagem já foi finalizada")
 
         self.__saida = datetime.now()
-        dias = self.__saida - self.__entrada
+        dias = max(1, (self.__saida - self.__entrada).days)
         self.__valorTotal = self.__calcular_total(dias)
         self.__quarto.enviar_limpeza()
 

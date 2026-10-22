@@ -6,4 +6,4 @@ class QuartoDuplo(quarto.Quarto):
 
     #métodos
     def calcular_diaria(self, dias) -> float:
-        return 500*self.dias
+        return 500*dias

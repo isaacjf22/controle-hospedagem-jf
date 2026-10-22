@@ -1,7 +1,8 @@
-from pessoas.pessoa import Pessoa
+from entities.pessoas.pessoa import Pessoa
 
 class Funcionario(Pessoa):
     def __init__(self,nome , cpf , id , senha):
+        super().__init__(id, nome, cpf)
         self.__senha = self.validar_senha(senha)
 
     @staticmethod
