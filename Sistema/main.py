@@ -167,4 +167,4 @@ titulo("9. Logout")
 ctl_login.logout()
 ok(f"funcionário logado: {ctl_login.funcionarioLogado}")
 
-print("\nFim dos testes.")
+print("\nFim dos testes")
