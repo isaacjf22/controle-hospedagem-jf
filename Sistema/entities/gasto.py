@@ -1,8 +1,8 @@
 class Gasto:
     def __init__(self, nome , valorUnitario, quantidade):
-        self.__nome = nome
-        self.__valorUnitario = valorUnitario
-        self.__quantidade = quantidade
+        self.nome = nome
+        self.valorUnitario = valorUnitario
+        self.quantidade = quantidade
 
     #encapsulamento
     @property
