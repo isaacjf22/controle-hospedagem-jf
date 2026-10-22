@@ -15,7 +15,8 @@ class ControladorQuarto:
     #métodos
     def listar_quartos(self):
         for quarto in self.__quartos:
-            print(f"Quarto n° {quarto.numeroQuarto} - STATUS: {quarto.statusQuarto}")
+            return list(self.__quartos) #copia 
+            #print(f"Quarto n° {quarto.numeroQuarto} - STATUS: {quarto.statusQuarto}")
 
     def buscar_quarto(self, numeroQuarto): #retonar um quarto
         for quarto in self.__quartos:

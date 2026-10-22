@@ -10,7 +10,7 @@ class Gasto:
         return self.__nome
     @nome.setter
     def nome(self, novo):
-        if novo is not None and not novo.strip(): #verica se o nome tem conteudo e se o nome sem espaço tem conteudo
+        if novo is not None and novo.strip(): #verica se o nome tem conteudo e se o nome sem espaço tem conteudo
             self.__nome = novo
         else: #se o nome estiver vazio
             raise ValueError("Escolha de nome inválido.")

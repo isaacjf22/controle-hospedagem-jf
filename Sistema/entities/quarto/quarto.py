@@ -29,7 +29,7 @@ class Quarto(ABC):
 
     def ocupar(self):
         if self._statusQuarto != Status.LIVRE:
-            raise("Só pode ocupar quarto que estiver LIVRE.")
+            raise ValueError("Só pode ocupar quarto que estiver LIVRE.")
         self._statusQuarto = Status.OCUPADO
 
     def concluir_limpeza(self):

@@ -1,7 +1,7 @@
 from itertools import count
 
 from entities.comprovante_hospedagem import ComprovanteHospedagem
-from extrato_conta import ExtratoConta
+from entities.extrato_conta import ExtratoConta
 
 from datetime import datetime
 
@@ -44,12 +44,8 @@ class ControladorHospedagem:
         hospedagem = self.__buscar_hospedagem(idHospedagem)
         hospedagem.adicionar_gasto(nome, valorUnitario, quantidade)
 
-    def concluir_limpeza(self, numeroQuarto):
-        quarto = self.__ctlQuarto.buscar_quarto(numeroQuarto)
-        quarto.concluir_limpeza()
-
     def listar_hospedagens_ativas(self):
-        return self.__hospedagensAtivas
+        return list(self.__hospedagensAtivas) #copia inves da original
         #for hospedagem in self.__hospedagensAtivas:
          #   print(f"{hospedagem.id}) QUARTO: {hospedagem.quarto.numeroQuarto} / CLIENTE: {hospedagem.cliente.nome}")
 

@@ -13,13 +13,13 @@ class Pessoa(ABC):
 
     @property
     def nome(self):
-        return self.nome
+        return self._nome
     @nome.setter
     def nome(self,nome : str):
         if not nome or not nome.strip(): ##se estiver vazio ou vazio com espaços cortados
             raise ValueError("Não pode nome vazio.")
         else:
-            self.nome = nome.strip() #corta os espços vazios
+            self._nome = nome.strip() #corta os espços vazios
 
     @property
     def cpf(self):

@@ -32,7 +32,7 @@ class ControladorFuncionario:
         raise ValueError("Funcionário não encontrado.")
 
     def listar_funcionarios(self):
-        return self.__funcionarios
+        return list(self.__funcionarios) #copia inves do original
         #for funcionario in self.__funcionarios:
          #   print(f"{funcionario.id}) {funcionario.nome} - [{funcionario.cpf}]")
 
