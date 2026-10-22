@@ -1,9 +1,18 @@
+from datetime import datetime
+from entities.comprovante_hospedagem import ComprovanteHospedagem
+from entities.extrato_conta import ExtratoConta
+from entities.gasto import Gasto
+from pessoas.pessoa import Pessoa
+
+
 class Hospedagem:
-    def __init__(self, id, entrada, saidaPrevista, cliente , quarto ):
+    def __init__(self, id, entrada : datetime, saidaPrevista : datetime, cliente , quarto ):
         self.__id = id
         self.__entrada = entrada
         self.__saidaPrevista = saidaPrevista
         self.__valorTotal = 0
+        self.__saida = None
+
 
         #relações
         self.__gastos = []
@@ -30,6 +39,10 @@ class Hospedagem:
         self.__saidaPrevista = novaSaidaPrevista
 
     @property
+    def saida(self):
+        return self.__saida
+
+    @property
     def valorTotal(self):
         return self.__valorTotal
 
@@ -41,8 +54,34 @@ class Hospedagem:
     def quarto(self):
         return self.__quarto
 
-
     #métodos
-    def adicionar_gasto(self, gasto) -> None:
+    def adicionar_gasto(self, nome, quantidade, valorUnitario) -> None:
+        gasto =  Gasto(nome, quantidade, valorUnitario)
         self.__gastos.append(gasto)
+
+    def __calcular_total(self, dias) -> float:
+        total = 0
+        total += self.__quarto.calcular_total(dias)
+        for gasto in self.__gastos:
+            total += gasto.calcular_total()
+        return total
+
+    def gerar_comprovante(self) -> ComprovanteHospedagem:
+        return ComprovanteHospedagem(self.__cliente.nome,self.__cliente.cpf,self.__entrada,self.__saidaPrevista, self.__quarto.numeroQuarto)
+
+    def gerar_extrato(self) -> ExtratoConta:
+        extrato = ExtratoConta(self.__cliente.nome, self.__cliente.cpf, self.__saida, self.__valorTotal)
+        return extrato
+
+    def finalizar(self) -> None:
+        if self.__saida is not None:
+            raise ValueError("A hospedagem já foi finalizada")
+
+        self.__saida = datetime.now()
+        dias = self.__saida - self.__entrada
+        self.__valorTotal = self.__calcular_total(dias)
+        self.__quarto.enviar_limpeza()
+
+
+
 

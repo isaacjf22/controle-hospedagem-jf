@@ -1,11 +1,11 @@
 from quarto import quarto
 
 class QuartoSimples(quarto.Quarto):
-    def __init__(self, numeroQuarto, dias):
-        super().__init__(numeroQuarto, dias)
+    def __init__(self, numeroQuarto):
+        super().__init__(numeroQuarto)
 
     #métodos
-    def calcular_status(self) -> float:
-        return 250*self.__dias
+    def calcular_diaria(self, dias) -> float:
+        return 250*dias
 
 

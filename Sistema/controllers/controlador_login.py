@@ -1,10 +1,9 @@
 from controllers.controlador_funcionario import ControladorFuncionario
 
 class ControladorLogin:
-    def __init__(self):
+    def __init__(self, ctlFuncionario):
         self.__funcionarioLogado = None
-        self.__ctlFuncionario = ControladorFuncionario()
-
+        self.__ctlFuncionario = ctlFuncionario
 
     #encapsulamento
     @property

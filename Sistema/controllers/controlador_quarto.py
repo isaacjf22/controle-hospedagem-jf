@@ -49,7 +49,7 @@ class ControladorQuarto:
     def concluir_limpeza(self, numeroQuarto):
         quarto = self.buscar_quarto(numeroQuarto)
         if not quarto.statusQuarto == Status.LIMPEZA:
-            raise("O quarto precisa estar em LIMPEZA para concluir limpeza.")
+            raise ValueError("O quarto precisa estar em LIMPEZA para concluir limpeza.")
         quarto.concluir_limpeza()
 
 
