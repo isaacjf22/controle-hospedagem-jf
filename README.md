@@ -14,7 +14,7 @@ O projeto aplica herança, polimorfismo, composição, associação e dependênc
 
 | Nível | Propósito | Interface | Vídeo         | Commit de entrega    | Status |
 |:---:|---|---|---------------|----------------------|:---:|
-| **1** | Modelagem em UML (diagrama de classes e de casos de uso) e implementação das classes, testando todas as funcionalidades por meio de um roteiro de testes | Terminal (`main.py`) | [Assistir](#) | `nivel 1 concluído`  | Em andamento |
+| **1** | Modelagem em UML (diagrama de classes e de casos de uso) e implementação das classes, testando todas as funcionalidades por meio de um roteiro de testes | Terminal (`main.py`) | [Assistir](https://youtu.be/cp6dItPyFN4) | `nivel 1 concluído`  | Concluído |
 | **2** | Menu funcional: o usuário navega pelas funcionalidades do sistema | Terminal (menu) | Em breve      | `nivel-2: concluído` | Pendente |
 | **3** | Persistência dos dados em banco de dados | Terminal (menu) | Em breve      | `nivel-3: concluído` | Pendente |
 | **4** | Interface gráfica, com o sistema funcionando em janelas | Janelas (GUI) | Em breve      | `nivel-4: concluído` | Pendente |
