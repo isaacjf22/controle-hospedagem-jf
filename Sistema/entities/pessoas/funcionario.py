@@ -6,7 +6,7 @@ class Funcionario(Pessoa):
         self.__senha = self.validar_senha(senha)
 
     @staticmethod
-    def validar_senha(senha : int) -> str:
+    def validar_senha(senha) -> str:
         if not senha or not senha.strip():
             raise ValueError("Não pode senha vazia.")
         elif len(senha) < 4:
@@ -22,6 +22,7 @@ class Funcionario(Pessoa):
     def verificar_senha(self, tentativa : str) -> bool:
         if tentativa == self.__senha:
             return True
+        return False
         #se estiver errada, retorna None e significa False.
 
 
