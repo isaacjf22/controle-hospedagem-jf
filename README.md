@@ -15,7 +15,7 @@ O projeto aplica herança, polimorfismo, composição, associação e dependênc
 | Nível | Propósito | Interface | Vídeo         | Commit de entrega    | Status |
 |:---:|---|---|---------------|----------------------|:---:|
 | **1** | Modelagem em UML (diagrama de classes e de casos de uso) e implementação das classes, testando todas as funcionalidades por meio de um roteiro de testes | Terminal (`main.py`) | [Assistir](https://youtu.be/cp6dItPyFN4) | `nivel 1 concluído`  | Concluído |
-| **2** | Menu funcional: o usuário navega pelas funcionalidades do sistema | Terminal (menu) | Em breve      | `nivel-2: concluído` | Pendente |
+| **2** | Menu funcional: o usuário navega pelas funcionalidades do sistema | Terminal (menu) | Em breve      | `nivel-2: concluído` | Em andamento |
 | **3** | Persistência dos dados em banco de dados | Terminal (menu) | Em breve      | `nivel-3: concluído` | Pendente |
 | **4** | Interface gráfica, com o sistema funcionando em janelas | Janelas (GUI) | Em breve      | `nivel-4: concluído` | Pendente |
 
@@ -29,11 +29,16 @@ O projeto aplica herança, polimorfismo, composição, associação e dependênc
 - Diagrama de casos de uso.
 - Roteiro de testes (`main.py`) que percorre todas as funcionalidades e mostra também os erros que o sistema recusa.
 
-**Vídeo de apresentação (até 3 min):** *link em breve*
+**Vídeo de apresentação (até 3 min):** [assistir no YouTube](https://youtu.be/cp6dItPyFN4)
 
 ### Nível 2: Menu funcional
 
 **Propósito:** permitir que o usuário use o sistema por conta própria, escolhendo as opções em um menu no terminal.
+
+- Tela de login, que dá acesso ao sistema e ao cadastro de funcionários.
+- Menu de hospedagem: check-in, consumo, check-out, conclusão de limpeza e cadastro de clientes.
+- Logout, que encerra a sessão e volta à tela de login.
+- `ControladorSistema`, que monta o sistema e decide qual tela abrir. O `main.py` passa a só iniciá-lo.
 
 **Vídeo de apresentação (até 6 min):** *link em breve*
 
@@ -64,7 +69,11 @@ O projeto aplica herança, polimorfismo, composição, associação e dependênc
 |---|---|---|
 | **Entity** | Guarda os dados e as regras do próprio objeto (por exemplo, um quarto só é ocupado se estiver livre) | `Sistema/entities/` |
 | **Control** | Coordena os casos de uso e as regras que envolvem vários objetos (por exemplo, CPF repetido) | `Sistema/controllers/` |
-| **Boundary** | Interação com o usuário | `Sistema/main.py` |
+| **Boundary** | Interação com o usuário: mostra as telas, lê o que é digitado e exibe os erros. Não contém regras | `Sistema/boudaries/` |
+
+O **`ControladorSistema`** cria todos os controladores e telas uma única vez e entrega a mesma instância a quem precisa, para que todas as telas vejam os mesmos dados. Ele também controla a navegação: abre o login, e depois do login abre o menu do sistema. Assim, o `main.py` fica sem lógica e apenas inicia o sistema.
+
+No Nível 1, a fronteira era o próprio `main.py`, que rodava o roteiro de testes.
 
 ## Diagramas UML
 
@@ -77,16 +86,18 @@ Os diagramas do sistema estão na pasta [`UML/`](./UML):
 
 ```
 Sistema/
+├── boudaries/      Fronteiras: as telas do menu no terminal (login e hospedagem)
 ├── controllers/    Controladores (cliente, funcionário, login, quarto, hospedagem)
+│                   e o ControladorSistema, que monta o sistema e controla a navegação
 ├── entities/       Entidades do domínio
 │   ├── pessoas/    Pessoa (abstrata), Cliente e Funcionário
 │   └── quarto/     Quarto (abstrata), QuartoSimples e QuartoDuplo
-└── main.py         Ponto de entrada do sistema
+└── main.py         Ponto de entrada: só inicia o ControladorSistema
 UML/                Diagramas de classes e de casos de uso
 LICENSE             Licença MIT
 ```
 
-As pastas `controllers/` e `entities/` concentram as regras do sistema e são reaproveitadas em todos os níveis. O que muda de um nível para o outro é a forma de interagir com elas (`main.py`) e, a partir do Nível 3, onde os dados são guardados.
+As pastas `controllers/` e `entities/` concentram as regras do sistema e são reaproveitadas em todos os níveis. O que muda de um nível para o outro é a forma de interagir com elas (as fronteiras) e, a partir do Nível 3, onde os dados são guardados.
 
 ## Como executar
 
@@ -106,6 +117,8 @@ O `main.py` é o ponto de entrada e o seu comportamento depende do nível:
 | 2 | Abre o menu do sistema no terminal |
 | 3 | Abre o menu, com os dados guardados em banco de dados |
 | 4 | Abre a interface gráfica |
+
+**Primeiro acesso (Nível 2):** o sistema começa sem funcionários, e os dados ficam só na memória enquanto o programa está aberto. Na tela inicial, entre em *Gerenciar funcionários* e cadastre um funcionário (CPF com 11 dígitos e senha com pelo menos 4 caracteres). Depois, use o nome e a senha dele em *Realizar login*.
 
 Para ver o sistema exatamente como estava em um nível, use o commit de entrega indicado na [tabela de níveis](#níveis-do-projeto).
 

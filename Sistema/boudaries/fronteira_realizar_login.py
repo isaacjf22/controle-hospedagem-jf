@@ -9,7 +9,6 @@ class RealizarLogin:
     def __init__(self, ctl_login : ControladorLogin, ctl_funcionario : ControladorFuncionario) -> None:
         self.__ctl_login = ctl_login
         self.__ctl_funcionario = ctl_funcionario
-        self.__logado = False
 
     def mostrar_menu(self): 
         menu = {
@@ -18,7 +17,7 @@ class RealizarLogin:
             "3": ("Sair do programa", None)
         }
         while True:
-            if self.__logado:
+            if self.__ctl_login.__funcionarioLogado is not None:
                 return 
             self.__limpar_tela()
             print("="*25)
@@ -44,10 +43,10 @@ class RealizarLogin:
         try: #oq for tentar , coloca em try 
             self.__ctl_login.login(nome, senha) 
             print("Login realizado!")
-            self.__logado = True
             sleep(3)
         except ValueError as erro:
             print(erro)
+            self.__pausar()
             
 
     def __gerenciar_funcionarios(self):
@@ -80,10 +79,14 @@ class RealizarLogin:
         print("CADASTRO DE FUNCIONÁRIOS".center(25))
         print("="*25)
         print()
-        nome = input("Nome do funcionário: ")
-        cpf = input("CPF do funcionário (não precisa formatar): ")
-        senha = input("Nova senha do funcionário: ")
-        self.__ctl_funcionario.cadastrar_funcionario(nome, cpf, senha)
+        try:
+            nome = input("Nome do funcionário: ")
+            cpf = input("CPF do funcionário (não precisa formatar): ")
+            senha = input("Nova senha do funcionário: ")
+            self.__ctl_funcionario.cadastrar_funcionario(nome, cpf, senha)
+        except ValueError as erro:
+            print(erro)
+            self.__pausar()
 
     def __remover_funcionario(self): 
         self.__limpar_tela()
@@ -95,6 +98,7 @@ class RealizarLogin:
             self.__ctl_funcionario.remover_funcionario(id)
         except ValueError as erro:
             print(erro)
+            self.__pausar()
 
     def __atualizar_funcionario(self):
         self.__limpar_tela()
@@ -108,6 +112,7 @@ class RealizarLogin:
             self.__ctl_funcionario.atualizar_funcionario(id, nome, senha)
         except ValueError as erro:
             print(erro)
+            self.__pausar()
 
     def __listar_funcionarios(self):
         print("="*25)
@@ -115,7 +120,7 @@ class RealizarLogin:
         print("="*25)
         for funcionario  in self.__ctl_funcionario.listar_funcionarios():
             print(f"    {funcionario.id}) {funcionario.nome} - {funcionario.cpf}")
-            sleep(0.5)
+            sleep(0.05)
         print()
     
     def __validacao(self, mensagem, valores_aceitos):

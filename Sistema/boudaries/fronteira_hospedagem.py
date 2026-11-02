@@ -24,7 +24,7 @@ class RealizarHospedagem:
             "5" : ("Gerenciar clientes", self.__gerenciar_clientes),
             "6" : ("Realizar logout ", None),
         }
-        self.__limpar_tela
+        self.__limpar_tela()
         while True:
             print("="*25)
             print("CONTROLE DE HOSPEDAGEM".center(25))
@@ -37,7 +37,7 @@ class RealizarHospedagem:
                 break
             if escolha in menu: #vai acessar diretamente a chave = escolha 
                 menu[escolha][1]() #escolhe qual parte da tupla e executa a função 
-                
+
 
     def __realizar_checkin(self):
         self.__limpar_tela()
@@ -52,13 +52,14 @@ class RealizarHospedagem:
             dataSaida = input("Data de saída prevista (dd/mm/aaaa): ")
             data = datetime.strptime(dataSaida, "%d/%m/%Y")
             comprovante = self.__ctl_hospedagem.realizar_checkin(idC, idQ, data)
-            self.__limpar_tela
+            self.__limpar_tela()
             print("HOSPEDAGEM REALIZADA!")
             print()
             print(comprovante)
             self.__pausar()
         except ValueError as erro:
             print(erro)
+            self.__pausar()
 
     def __realizar_chekout(self):
         self.__limpar_tela()
@@ -70,6 +71,7 @@ class RealizarHospedagem:
             self.__pausar()
         except ValueError as erro:
             print(erro)
+            self.__pausar()
 
     def __concluir_limpeza(self):
         self.__limpar_tela()
@@ -79,6 +81,7 @@ class RealizarHospedagem:
             self.__ctl_quarto.concluir_limpeza(id)
         except ValueError as erro:
             print(erro)
+            self.__pausar()
 
     def __adicionar_consumo(self):
         self.__limpar_tela()
@@ -91,6 +94,7 @@ class RealizarHospedagem:
             self.__ctl_hospedagem.adicionar_consumo(id,nome,quantidade,valor)
         except ValueError as erro:
             print(erro)
+            self.__pausar()
 
 
     ##FRONTEIRA CRUD CLIENTE 
@@ -102,7 +106,7 @@ class RealizarHospedagem:
             "4" : ("Sair", None)
         }
         while True:
-            self.__limpar_tela
+            self.__limpar_tela()
             print("="*25)
             print("CONTROLE DE CLIENTE".center(25))
             print("="*25)
@@ -121,9 +125,13 @@ class RealizarHospedagem:
         print("CADASTRO DE CLIENTES".center(25))
         print("="*25)
         print()
-        nome = input("Nome do cliente: ")
-        cpf = input("CPF do cliente(não precisa formatar): ")
-        self.__ctl_cliente.cadastrar_cliente(nome, cpf)
+        try:
+            nome = input("Nome do cliente: ")
+            cpf = input("CPF do cliente(não precisa formatar): ")
+            self.__ctl_cliente.cadastrar_cliente(nome, cpf)
+        except ValueError as erro:
+            print(erro)
+            self.__pausar()
 
     def __remover_cliente(self): 
         self.__limpar_tela()
@@ -131,10 +139,11 @@ class RealizarHospedagem:
         print("REMOÇÃO DE CLIENTES".center(25))
         self.__listar_clientes()
         try:
-            id = int(input("Qual funcionário deseja remover da lista? --> "))
+            id = int(input("Qual cliente deseja remover da lista? --> "))
             self.__ctl_cliente.remover_cliente(id)
         except ValueError as erro:
             print(erro)
+            self.__pausar()
 
     def __atualizar_cliente(self):
         self.__limpar_tela()
@@ -147,6 +156,7 @@ class RealizarHospedagem:
             self.__ctl_cliente.atualizar_cliente(id, nome)
         except ValueError as erro:
             print(erro)
+            self.__pausar()
 
     def __listar_clientes(self):
         print("="*25)
@@ -154,7 +164,7 @@ class RealizarHospedagem:
         print("="*25)
         for cliente  in self.__ctl_cliente.listar_clientes():
             print(f"    {cliente.id}) {cliente.nome} - {cliente.cpf}")
-            sleep(0.5)
+            sleep(0.05)
         print()
 
     def __listar_quartos(self):
@@ -162,17 +172,17 @@ class RealizarHospedagem:
             print("LISTA DE QUARTOS".center(25))
             print("="*25)    
             for quarto in self.__ctl_quarto.listar_quartos():
-                print(f"    Quarto n° {quarto.numeroQuarto} - STATUS: {quarto.statusQuarto}")
-                sleep(0.5)
+                print(f"    Quarto n° {quarto.numeroQuarto} - STATUS: {quarto.statusQuarto.value}")
+                sleep(0.05)
             print()
 
     def __listar_hospedagens(self):
-            print("="*25)
-            print("LISTA DE HOSPEDAGENS ATIVAS".center(25))
-            print("="*25)    
+            print("="*30)
+            print("LISTA DE HOSPEDAGENS ATIVAS".center(30))
+            print("="*30)    
             for hospedagem in self.__ctl_hospedagem.listar_hospedagens_ativas():
                 print(f"    {hospedagem.id}) QUARTO: {hospedagem.quarto.numeroQuarto} / CLIENTE: {hospedagem.cliente.nome}")
-                sleep(0.5)
+                sleep(0.05)
             print()        
 
     #FUNÇÕES
@@ -194,4 +204,5 @@ class RealizarHospedagem:
             subprocess.run(["cls"], shell=True) # true pq é um comando no terminal 
         else:
             subprocess.run(["clear"]) # false pq é uma execução no terminal 
-    
+
+    #deveria criar def das leituras e except 

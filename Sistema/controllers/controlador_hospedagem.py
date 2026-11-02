@@ -27,8 +27,9 @@ class ControladorHospedagem:
         cliente = self.__ctlCliente.buscar(idCliente)
         quarto = self.__ctlQuarto.buscar_quarto(numeroQuarto)
 
-        hospedagem = Hospedagem(next(self.__contador), entrada, saidaPrevista, cliente, quarto)
         quarto.ocupar()
+        hospedagem = Hospedagem(next(self.__contador), entrada, saidaPrevista, cliente, quarto)
+        
         self.__hospedagensAtivas.append(hospedagem)
 
         return hospedagem.gerar_comprovante()

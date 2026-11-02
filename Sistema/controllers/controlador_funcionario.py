@@ -7,6 +7,11 @@ class ControladorFuncionario:
         self.__id = count(1)
 
     def cadastrar_funcionario(self, nome , cpf, senha) -> None:
+        cpfFormatado = f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
+        if any(c.cpf == cpfFormatado for c in self.__funcionarios): #condição e como
+            raise ValueError("CPF já cadastrado.")
+        if any(f.nome == nome.strip() for f in self.__funcionarios):
+            raise ValueError("Já existe funcionário registrado com esse nome.")
         funcionario = Funcionario(nome, cpf, next(self.__id), senha )
         self.__funcionarios.append(funcionario) #adicionando o funcioanrio na lista de cadastrados
 
