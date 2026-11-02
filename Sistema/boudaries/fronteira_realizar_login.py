@@ -9,6 +9,7 @@ class RealizarLogin:
     def __init__(self, ctl_login : ControladorLogin, ctl_funcionario : ControladorFuncionario) -> None:
         self.__ctl_login = ctl_login
         self.__ctl_funcionario = ctl_funcionario
+        self.__logado = False
 
     def mostrar_menu(self): 
         menu = {
@@ -17,13 +18,19 @@ class RealizarLogin:
             "3": ("Sair do programa", None)
         }
         while True:
-
+            if self.__logado:
+                return 
+            self.__limpar_tela()
+            print("="*25)
+            print("HOSPEDAGEM JF".center(25))
+            print("="*25)
+            print()
             for chave, (texto, _ ) in menu.items():
                 print(f"{chave}) {texto}")
-            escolha = self.__validacao("Qual opção deseja escolher", ("1","2","3")) 
+            escolha = self.__validacao("Qual opção deseja escolher: ", ("1","2","3")) 
             if escolha == "3":
                 print("Saindo do programa...")
-                break; 
+                break 
             if escolha in menu:
                 menu[escolha][1]()
     
@@ -34,7 +41,14 @@ class RealizarLogin:
         print("="*25)
         nome = input("Nome: ")
         senha = input("Senha: ")
-        self.__ctl_login.login(nome, senha)
+        try: #oq for tentar , coloca em try 
+            self.__ctl_login.login(nome, senha) 
+            print("Login realizado!")
+            self.__logado = True
+            sleep(3)
+        except ValueError as erro:
+            print(erro)
+            
 
     def __gerenciar_funcionarios(self):
         menu = {
@@ -46,15 +60,15 @@ class RealizarLogin:
         while True:
             self.__limpar_tela()
             print("="*25)
-            print("HOSPEDAGEM JF".center(25))
+            print("FUNCIONÁRIOS".center(25))
             print("="*25)
             print()
             for chave, (texto,_) in menu.items(): #_ para ignorar completamente a parte 
                 print(f"{chave}) {texto}")
             print()
-            escolha = self.__validacao("Qual opção deseja escolher", ('1','2','3','4')) 
+            escolha = self.__validacao("Qual opção deseja escolher: ", ('1','2','3','4')) 
             if escolha == '4':
-                break; 
+                break
             if escolha in menu: #vai acessar diretamente a chave = escolha 
                 menu[escolha][1]()
 
@@ -76,18 +90,24 @@ class RealizarLogin:
         print("="*25)
         print("REMOÇÃO DE FUNCIONÁRIOS".center(25))
         self.__listar_funcionarios()
-        id = input("Qual funcionário deseja remover da lista?")
-        self.__ctl_funcionario.remover_funcionario(id)
+        try:
+            id = int(input("Qual funcionário deseja remover da lista? --> "))
+            self.__ctl_funcionario.remover_funcionario(id)
+        except ValueError as erro:
+            print(erro)
 
     def __atualizar_funcionario(self):
         self.__limpar_tela()
         print("="*25)
         print("ATUALIZAÇÃO DE FUNCIONÁRIOS".center(25))
         self.__listar_funcionarios()
-        id = input("Qual funcionário deseja atualizar os dados?")
-        nome = input("Novo nome (se não desejar alterar, aperte ENTER): ") or None #or None faz q aceite nada na variavel 
-        senha = input("Nova senha (se não desejar alterar, aperte ENTER): ") or None
-        self.__ctl_funcionario.atualizar_funcionario(id, nome, senha)
+        try:
+            id = int(input("Qual funcionário deseja atualizar os dados? --> "))
+            nome = input("Novo nome (se não desejar alterar, aperte ENTER): ") or None #or None faz q aceite nada na variavel 
+            senha = input("Nova senha (se não desejar alterar, aperte ENTER): ") or None
+            self.__ctl_funcionario.atualizar_funcionario(id, nome, senha)
+        except ValueError as erro:
+            print(erro)
 
     def __listar_funcionarios(self):
         print("="*25)
@@ -99,9 +119,12 @@ class RealizarLogin:
         print()
     
     def __validacao(self, mensagem, valores_aceitos):
-        valor = input(mensagem)
-        if valor not in valores_aceitos:
-            print("Entrada incorreta.")
+        while True:
+            valor = input(mensagem)
+            if valor not in valores_aceitos:
+                print("Entrada incorreta.")
+            else:
+                break
         return valor
 
     def __limpar_tela(self):
