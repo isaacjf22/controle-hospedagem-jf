@@ -17,7 +17,7 @@ class RealizarLogin:
             "3": ("Sair do programa", None)
         }
         while True:
-            if self.__ctl_login.__funcionarioLogado is not None:
+            if self.__ctl_login.funcionarioLogado is not None:
                 return 
             self.__limpar_tela()
             print("="*25)
@@ -131,6 +131,9 @@ class RealizarLogin:
             else:
                 break
         return valor
+
+    def __pausar(self):
+        input("Aperte qualquer tecla para continuar...\n")
 
     def __limpar_tela(self):
         if os.name == 'nt': #windows

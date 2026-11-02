@@ -24,8 +24,8 @@ class RealizarHospedagem:
             "5" : ("Gerenciar clientes", self.__gerenciar_clientes),
             "6" : ("Realizar logout ", None),
         }
-        self.__limpar_tela()
         while True:
+            self.__limpar_tela()
             print("="*25)
             print("CONTROLE DE HOSPEDAGEM".center(25))
             print("="*25)

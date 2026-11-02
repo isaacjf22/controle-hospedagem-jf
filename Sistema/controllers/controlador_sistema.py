@@ -24,7 +24,6 @@ f_realizar_hospedagem = RealizarHospedagem(ctl_hospedagem, ctl_cliente, ctl_quar
 class ControladorSistema:
     def __init__(self):
         self.__ctl_login = ctl_login
-        self.__ctl_funcionario = ctl_funcionario
         self.__f_realizar_login = f_realizar_login
         self.__f_realizar_hospedagem = f_realizar_hospedagem
 
@@ -33,7 +32,7 @@ class ControladorSistema:
             self.__f_realizar_login.mostrar_menu()
             if self.__ctl_login.funcionarioLogado is None:
                 break #significa que saiu do sistema 
-            f_realizar_hospedagem.mostrar_menu()
+            self.__f_realizar_hospedagem.mostrar_menu()
             self.__ctl_login.logout()
 
 
