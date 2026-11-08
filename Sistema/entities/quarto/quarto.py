@@ -3,9 +3,9 @@ from entities.status import Status
 
 class Quarto(ABC):
     #construtor
-    def __init__(self, numeroQuarto):
+    def __init__(self, numeroQuarto, status = Status.LIVRE, id=None):
         self._numeroQuarto = numeroQuarto
-        self._statusQuarto = Status.LIVRE
+        self._statusQuarto = status
 
 
     #encapsulamento
@@ -24,15 +24,6 @@ class Quarto(ABC):
     def calcular_diaria(self, dias) -> float:
         pass
 
-    def enviar_limpeza(self):
-        self._statusQuarto = Status.LIMPEZA
-
-    def ocupar(self):
-        if self._statusQuarto != Status.LIVRE:
-            raise ValueError("Só pode ocupar quarto que estiver LIVRE.")
-        self._statusQuarto = Status.OCUPADO
-
-    def concluir_limpeza(self):
-        self._statusQuarto = Status.LIVRE
+   
 
 
