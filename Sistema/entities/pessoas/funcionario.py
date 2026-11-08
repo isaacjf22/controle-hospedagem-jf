@@ -21,7 +21,7 @@ class Funcionario(Pessoa):
     
     def alterar_senha(self, nova):
         novo_hash = self.validar_senha(nova)
-        if self.__checar_hash:
+        if self.__checar_hash(nova):
             raise ValueError("A nova senha precisa ser diferente da anterior.")
         self.__senha = novo_hash
         return novo_hash

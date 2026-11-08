@@ -35,8 +35,8 @@ class ControladorQuarto:
         if not self.__verificarLivre():
             raise ValueError("Não tem quarto disponível.")
         quarto = self.buscar_quarto(numeroQuarto)
-        if quarto.statusQuarto == Status.OCUPADO: #se o quarto ja estiver ocupado
-            raise ValueError("Não pode ocupar um quarto já ocupado.")
+        if quarto.statusQuarto != Status.LIVRE: #se o quarto ja estiver ocupado
+            raise ValueError("Não pode ocupar esse quarto.")
         self.__quarto_dao.ocupar(numeroQuarto)
 
     def realizar_limpeza(self, numeroQuarto):

@@ -8,20 +8,24 @@ class ControladorFuncionario:
 
     def cadastrar_funcionario(self, nome , cpf, senha) -> None:
         funcionario = Funcionario(nome, cpf, senha)
-        if any(c.cpf == funcionario.cpf_formatado for c in self.__funcionario_dao.listar()): #condição e como
+        funcionarios = self.__funcionario_dao.listar()
+        if any(c.cpf == funcionario.cpf for c in funcionarios): #condição e como
             raise ValueError("CPF já cadastrado.")
-        if any(f.nome == funcionario.nome for f in self.__funcionario_dao.listar()):
+        if any(f.nome == funcionario.nome for f in funcionarios):
             raise ValueError("Já existe funcionário registrado com esse nome.")
         self.__funcionario_dao.inserir(funcionario)
         
 
     def remover_funcionario(self, id) -> None:
         funcionario = self.buscar(id) #ira buscar e verificar a existencia 
+        if (len(self.__funcionario_dao.listar()) == 1):
+            raise ValueError("Não pode apagar o único funcionário do sistema.")
         self.__funcionario_dao.remover(id)
 
     def atualizar_funcionario(self, id, nome=None, senha=None) -> None:
         funcionario = self.buscar(id) # verifica se existe
         if nome is not None:
+            funcionario.nome = nome
             self.__funcionario_dao.atualizar_nome(nome, id)
         if senha is not None:
             novo = funcionario.alterar_senha(senha)

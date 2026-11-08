@@ -14,12 +14,12 @@ class FuncionarioDAO:
             funcionario = con.execute(
                 "SELECT id, nome , cpf , senha_hash FROM funcionarios WHERE id = %s", (id,)
             ).fetchone()
-        return self.__montar(funcionario)
+        return self.__montar(funcionario) if funcionario else None
 
     def listar(self):
         with conectar() as con:
             funcionarios = con.execute(
-                "SELECT id, nome , cpf , senha_hash FROM funcionarios ORDEM BY id"
+                "SELECT id, nome , cpf , senha_hash FROM funcionarios ORDE BY id"
             ).fetchall()
         resultado = []
         for funcionario in funcionarios:

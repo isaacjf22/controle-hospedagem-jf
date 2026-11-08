@@ -1,5 +1,6 @@
 from database.conexao import conectar 
 from entities.pessoas.cliente import Cliente
+import psycopg
 
 class ClienteDAO:
     
@@ -37,9 +38,12 @@ class ClienteDAO:
 
     def remover(self, id):
         with conectar() as con:
-            con.execute(
-                "DELETE FROM clientes WHERE id = %s" , (id,)
-            )
+            try:
+                con.execute(
+                    "DELETE FROM clientes WHERE id = %s" , (id,)
+                )
+            except psycopg.errors.ForeignKeyViolation:
+                raise ValueError("Não é possível concluir.")
 
     def __montar(self, retorno): #transforma o dado em objeto 
         return Cliente(nome=retorno[1], cpf=retorno[2], id=retorno[0])

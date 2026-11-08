@@ -22,7 +22,7 @@ class QuartoDAO:
     def listar(self):
         with conectar() as con:
             quartos = con.execute(
-                "SELECT * FROM quartos ORDER BY numero_quarto"
+                "SELECT id, numero_quarto, status FROM quartos ORDER BY numero_quarto"
             ).fetchall()
 
         resultado = []

@@ -25,12 +25,13 @@ class ControladorHospedagem:
         if entrada >= saidaPrevista :
             raise ValueError("A data de saída deve ser após a data de entrada.")
 
-        cliente = self.__ctlCliente.buscar(idCliente)
+        cliente = self.__ctlCliente.buscar_cliente(idCliente)
         quarto = self.__ctlQuarto.buscar_quarto(numeroQuarto)
         hospedagem = Hospedagem(entrada,saidaPrevista, cliente, quarto)
 
+       
+        self.__hospedagem_dao.check_in(hospedagem)      #1° marca e dps ocupa
         self.__ctlQuarto.ocupar_quarto(numeroQuarto)
-        self.__hospedagem_dao.check_in(hospedagem)      
 
         return hospedagem.gerar_comprovante()
 
@@ -40,8 +41,8 @@ class ControladorHospedagem:
         dias = hospedagem.finalizar()
         total = self.__calcular_total(idHospedagem,quarto, dias)
         hospedagem.definir_total(total)
+        self.__hospedagem_dao.check_out(idHospedagem,hospedagem.saida,hospedagem.valor_total) #segue a ordem do caso de uso
         self.__ctlQuarto.realizar_limpeza(quarto.numeroQuarto)
-        self.__hospedagem_dao.check_out(idHospedagem,hospedagem.saida,hospedagem.valor_total)
         return hospedagem.gerar_extrato()
     
         #consumo 

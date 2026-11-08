@@ -37,7 +37,7 @@ class HospedagemDAO:
         resultado = []
         for hospedagem in hospedagens:
             resultado.append(self.__montar(hospedagem))
-        return resultado
+        return list(resultado)
 
     def __montar(self, linha):
         # id , id_cliente, quarto, saida , entrada 
