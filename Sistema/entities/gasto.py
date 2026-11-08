@@ -1,9 +1,10 @@
 class Gasto:
-    def __init__(self, nome , valorUnitario, quantidade):
+    def __init__(self, nome ,id_hospedagem ,valorUnitario , quantidade):
         self.nome = nome
         self.valorUnitario = valorUnitario
         self.quantidade = quantidade
-
+        self.__id_hospedagem = id_hospedagem #pode ficar direto ja q n tem setter 
+        
     #encapsulamento
     @property
     def nome(self):
@@ -14,6 +15,10 @@ class Gasto:
             self.__nome = novo
         else: #se o nome estiver vazio
             raise ValueError("Escolha de nome inválido.")
+
+    @property
+    def id_hospedagem(self):
+        return self.__id_hospedagem
 
     @property
     def valorUnitario(self):

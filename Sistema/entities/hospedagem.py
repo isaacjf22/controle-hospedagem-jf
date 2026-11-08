@@ -1,7 +1,7 @@
 from datetime import datetime
 from entities.comprovante_hospedagem import ComprovanteHospedagem
 from entities.extrato_conta import ExtratoConta
-from entities.gasto import Gasto
+
 
 class Hospedagem:
     def __init__(self, entrada : datetime, saidaPrevista : datetime, cliente , quarto, id = None ):
@@ -53,17 +53,11 @@ class Hospedagem:
         return self.__quarto
 
     #métodos
-    def adicionar_gasto(self, nome, quantidade, valorUnitario) -> None:
-        gasto =  Gasto(nome, quantidade, valorUnitario)
-        self.__gastos.append(gasto)
+    def definir_total(self, total) -> None:
+        self.__valorTotal = total
 
-    def __calcular_total(self, dias) -> float:
-        total = 0
-        total += self.__quarto.calcular_diaria(dias)
-        for gasto in self.__gastos:
-            total += gasto.calcular_total()
-        return total
 
+        
     def gerar_comprovante(self) -> ComprovanteHospedagem:
         return ComprovanteHospedagem(self.__cliente.nome,self.__cliente.cpf,self.__entrada,self.__saidaPrevista, self.__quarto.numeroQuarto)
 
@@ -71,14 +65,12 @@ class Hospedagem:
         extrato = ExtratoConta(self.__cliente.nome, self.__cliente.cpf, self.__saida, self.__valorTotal)
         return extrato
 
-    def finalizar(self) -> None:
+    def finalizar(self):
         if self.__saida is not None:
             raise ValueError("A hospedagem já foi finalizada")
-
         self.__saida = datetime.now()
         dias = max(1, (self.__saida - self.__entrada).days)
-        self.__valorTotal = self.__calcular_total(dias)
-        self.__quarto.enviar_limpeza()
+        return dias
 
 
 

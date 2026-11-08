@@ -13,9 +13,11 @@ class ControladorCliente:
         self.__cliente_dao.cadastrar(cliente)
 
     def remover_cliente(self, id) -> None:
+        cliente = self.__buscar_cliente(id)
         self.__cliente_dao.remover(id)
 
     def atualizar_cliente(self, id ,nome=None):
+        cliente = self.__buscar_cliente(id)
         if nome is not None: #se o nome tem algum valor
             self.__cliente_dao.atualizar(id, nome)
 
@@ -23,3 +25,9 @@ class ControladorCliente:
         return list(self.__cliente_dao.listar()) #manda uma copia inves da referencia
         #for cliente in self.__clientes:
             #print(f"{cliente.id}) {cliente.nome} - [{cliente.cpf}]")
+
+    def __buscar_cliente(self, id):
+        cliente = self.__cliente_dao.buscar_id(id)
+        if cliente is None:
+            raise ValueError("Cliente não encontrado.")
+        return cliente

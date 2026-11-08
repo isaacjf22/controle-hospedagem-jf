@@ -259,7 +259,7 @@ class RealizarHospedagem:
         print("LISTA DE FUNCIONÁRIOS".center(25))
         print("="*25)
         for funcionario  in self.__ctl_funcionario.listar_funcionarios():
-            print(f"    {funcionario.id}) {funcionario.nome} - {funcionario.cpf}")
+            print(f"    {funcionario.id}) {funcionario.nome} - {funcionario.cpf_formatado}")
             sleep(0.05)
         print()
          
