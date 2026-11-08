@@ -10,13 +10,25 @@ from controllers.controlador_hospedagem import ControladorHospedagem
 from controllers.controlador_cliente import ControladorCliente
 from controllers.controlador_quarto import ControladorQuarto
 
+#DAO data acess object
+from dao.quarto_dao import QuartoDAO
+from dao.cliente_dao import ClienteDAO
+from dao.gasto_dao import GastoDAO
+from dao.hospedagem_dao import HospedagemDAO
+from dao.funcionario_dao import FuncionarioDAO
+
 
 
 #instanciações 
-ctl_cliente = ControladorCliente()
-ctl_quarto = ControladorQuarto()
-ctl_hospedagem = ControladorHospedagem(ctl_cliente, ctl_quarto)
-ctl_funcionario = ControladorFuncionario()
+dao_quarto = QuartoDAO()
+dao_cliente = ClienteDAO()
+dao_gasto = GastoDAO()
+dao_hospedagem = HospedagemDAO(dao_cliente,dao_quarto)
+dao_funcionario = FuncionarioDAO()
+ctl_cliente = ControladorCliente(dao_cliente)
+ctl_quarto = ControladorQuarto(dao_quarto)
+ctl_hospedagem = ControladorHospedagem(ctl_cliente, ctl_quarto, dao_hospedagem, dao_gasto)
+ctl_funcionario = ControladorFuncionario(dao_funcionario)
 ctl_login = ControladorLogin(ctl_funcionario)
 f_realizar_login = RealizarLogin(ctl_login)
 f_realizar_hospedagem = RealizarHospedagem(ctl_hospedagem, ctl_cliente, ctl_quarto,ctl_funcionario)
