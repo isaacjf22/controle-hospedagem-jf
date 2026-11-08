@@ -6,13 +6,15 @@ from datetime import datetime
 from controllers.controlador_hospedagem import ControladorHospedagem
 from controllers.controlador_cliente import ControladorCliente
 from controllers.controlador_quarto import ControladorQuarto
+from controllers.controlador_funcionario import ControladorFuncionario
 
 
 class RealizarHospedagem:
-    def __init__(self, ctl_hospedagem : ControladorHospedagem, ctl_cliente : ControladorCliente, ctl_quarto : ControladorQuarto) :
+    def __init__(self, ctl_hospedagem : ControladorHospedagem, ctl_cliente : ControladorCliente, ctl_quarto : ControladorQuarto, ctl_funcionario) :
         self.__ctl_cliente = ctl_cliente
         self.__ctl_quarto = ctl_quarto
         self.__ctl_hospedagem = ctl_hospedagem
+        self.__ctl_funcionario = ctl_funcionario
 
 
     def mostrar_menu(self):
@@ -22,7 +24,8 @@ class RealizarHospedagem:
             "3" : ("Concluir limpeza", self.__concluir_limpeza),
             "4" : ("Adicionar consumo", self.__adicionar_consumo),
             "5" : ("Gerenciar clientes", self.__gerenciar_clientes),
-            "6" : ("Realizar logout ", None),
+            "6": ("Gerenciar funcionários", self.__gerenciar_funcionarios),
+            "7" : ("Realizar logout ", None),
         }
         while True:
             self.__limpar_tela()
@@ -32,8 +35,8 @@ class RealizarHospedagem:
             print()            
             for chave, (texto, _) in menu.items():
                 print(f"{chave}) {texto}")
-            escolha = self.__validacao("Qual opção deseja escolher: ", ('1','2','3','4', '5', '6')) 
-            if escolha == '6':
+            escolha = self.__validacao("Qual opção deseja escolher: ", ('1','2','3','4', '5', '6','7')) 
+            if escolha == '7':
                 break
             if escolha in menu: #vai acessar diretamente a chave = escolha 
                 menu[escolha][1]() #escolhe qual parte da tupla e executa a função 
@@ -183,7 +186,83 @@ class RealizarHospedagem:
             for hospedagem in self.__ctl_hospedagem.listar_hospedagens_ativas():
                 print(f"    {hospedagem.id}) QUARTO: {hospedagem.quarto.numeroQuarto} / CLIENTE: {hospedagem.cliente.nome}")
                 sleep(0.05)
-            print()        
+            print()   
+
+    #FUNCIONÁRIOS 
+    def __gerenciar_funcionarios(self):
+        menu = {
+            "1": ("Cadastrar funcionário", self.__criar_funcionario), #a chave serve de referencia, ai escolhe a chave para acessar o valor e acionar a função 
+            "2": ("Remover funcionário", self.__remover_funcionario),
+            "3": ("Atualizar funcionário" , self.__atualizar_funcionario),
+            "4": ("Sair", None)
+        }
+        while True:
+            self.__limpar_tela()
+            print("="*25)
+            print("FUNCIONÁRIOS".center(25))
+            print("="*25)
+            print()
+            for chave, (texto,_) in menu.items(): #_ para ignorar completamente a parte 
+                print(f"{chave}) {texto}")
+            print()
+            escolha = self.__validacao("Qual opção deseja escolher: ", ('1','2','3','4')) 
+            if escolha == '4':
+                break
+            if escolha in menu: #vai acessar diretamente a chave = escolha 
+                menu[escolha][1]()
+
+
+
+    def __criar_funcionario(self): 
+        self.__limpar_tela()
+        print("="*25)
+        print("CADASTRO DE FUNCIONÁRIOS".center(25))
+        print("="*25)
+        print()
+        try:
+            nome = input("Nome do funcionário: ")
+            cpf = input("CPF do funcionário (não precisa formatar): ")
+            senha = input("Nova senha do funcionário: ")
+            self.__ctl_funcionario.cadastrar_funcionario(nome, cpf, senha)
+        except ValueError as erro:
+            print(erro)
+            self.__pausar()
+
+    def __remover_funcionario(self): 
+        self.__limpar_tela()
+        print("="*25)
+        print("REMOÇÃO DE FUNCIONÁRIOS".center(25))
+        self.__listar_funcionarios()
+        try:
+            id = int(input("Qual funcionário deseja remover da lista? --> "))
+            self.__ctl_funcionario.remover_funcionario(id)
+        except ValueError as erro:
+            print(erro)
+            self.__pausar()
+
+    def __atualizar_funcionario(self):
+        self.__limpar_tela()
+        print("="*25)
+        print("ATUALIZAÇÃO DE FUNCIONÁRIOS".center(25))
+        self.__listar_funcionarios()
+        try:
+            id = int(input("Qual funcionário deseja atualizar os dados? --> "))
+            nome = input("Novo nome (se não desejar alterar, aperte ENTER): ") or None #or None faz q aceite nada na variavel 
+            senha = input("Nova senha (se não desejar alterar, aperte ENTER): ") or None
+            self.__ctl_funcionario.atualizar_funcionario(id, nome, senha)
+        except ValueError as erro:
+            print(erro)
+            self.__pausar()
+
+    def __listar_funcionarios(self):
+        print("="*25)
+        print("LISTA DE FUNCIONÁRIOS".center(25))
+        print("="*25)
+        for funcionario  in self.__ctl_funcionario.listar_funcionarios():
+            print(f"    {funcionario.id}) {funcionario.nome} - {funcionario.cpf}")
+            sleep(0.05)
+        print()
+         
 
     #FUNÇÕES
     def __validacao(self, mensagem, valores_aceitos):

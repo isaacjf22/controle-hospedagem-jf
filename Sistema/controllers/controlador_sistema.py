@@ -18,8 +18,8 @@ ctl_quarto = ControladorQuarto()
 ctl_hospedagem = ControladorHospedagem(ctl_cliente, ctl_quarto)
 ctl_funcionario = ControladorFuncionario()
 ctl_login = ControladorLogin(ctl_funcionario)
-f_realizar_login = RealizarLogin(ctl_login, ctl_funcionario)
-f_realizar_hospedagem = RealizarHospedagem(ctl_hospedagem, ctl_cliente, ctl_quarto)
+f_realizar_login = RealizarLogin(ctl_login)
+f_realizar_hospedagem = RealizarHospedagem(ctl_hospedagem, ctl_cliente, ctl_quarto,ctl_funcionario)
 
 class ControladorSistema:
     def __init__(self):
