@@ -1,5 +1,3 @@
-from itertools import count
-
 from entities.comprovante_hospedagem import ComprovanteHospedagem
 from entities.extrato_conta import ExtratoConta
 
@@ -13,7 +11,6 @@ from entities.hospedagem import Hospedagem
 class ControladorHospedagem:
     #construtor
     def __init__(self, ctlCliente, ctlQuarto):
-        self.__contador = count(1)
         self.__hospedagensAtivas = []
         self.__ctlCliente = ctlCliente
         self.__ctlQuarto = ctlQuarto
@@ -28,7 +25,7 @@ class ControladorHospedagem:
         quarto = self.__ctlQuarto.buscar_quarto(numeroQuarto)
 
         quarto.ocupar()
-        hospedagem = Hospedagem(next(self.__contador), entrada, saidaPrevista, cliente, quarto)
+        hospedagem = Hospedagem(entrada, saidaPrevista, cliente, quarto)
         
         self.__hospedagensAtivas.append(hospedagem)
 

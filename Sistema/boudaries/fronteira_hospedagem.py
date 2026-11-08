@@ -166,7 +166,7 @@ class RealizarHospedagem:
         print("LISTA DE CLIENTES".center(25))
         print("="*25)
         for cliente  in self.__ctl_cliente.listar_clientes():
-            print(f"    {cliente.id}) {cliente.nome} - {cliente.cpf}")
+            print(f"    {cliente.id}) {cliente.nome} - {cliente.cpf_formatado}")
             sleep(0.05)
         print()
 

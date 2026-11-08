@@ -4,7 +4,7 @@ from entities.extrato_conta import ExtratoConta
 from entities.gasto import Gasto
 
 class Hospedagem:
-    def __init__(self, id, entrada : datetime, saidaPrevista : datetime, cliente , quarto ):
+    def __init__(self, entrada : datetime, saidaPrevista : datetime, cliente , quarto, id = None ):
         self.__id = id
         self.__entrada = entrada
         self.__saidaPrevista = saidaPrevista

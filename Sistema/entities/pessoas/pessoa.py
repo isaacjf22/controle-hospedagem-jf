@@ -1,7 +1,7 @@
 from abc import ABC , abstractmethod
 
 class Pessoa(ABC):
-    def __init__(self, id , nome, cpf):
+    def __init__(self, nome, cpf, id = None):
         self._id = id
         self.nome = nome
         self._cpf = self.validar_cpf(cpf) #validando cpf sem liberar o acesso pro codigo
@@ -23,6 +23,10 @@ class Pessoa(ABC):
 
     @property
     def cpf(self):
+        return self._cpf
+
+    @property
+    def cpf_formatado(self):
         return f"{self._cpf[:3]}.{self._cpf[3:6]}.{self._cpf[6:9]}-{self._cpf[9:]}" #formatação realizada por meio de fatiamentos
 
     @staticmethod

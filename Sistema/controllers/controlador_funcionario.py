@@ -1,10 +1,8 @@
-from itertools import count
 from entities.pessoas.funcionario import Funcionario
 
 class ControladorFuncionario:
     def __init__(self):
         self.__funcionarios = []
-        self.__id = count(1)
 
     def cadastrar_funcionario(self, nome , cpf, senha) -> None:
         cpfFormatado = f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
@@ -12,7 +10,7 @@ class ControladorFuncionario:
             raise ValueError("CPF já cadastrado.")
         if any(f.nome == nome.strip() for f in self.__funcionarios):
             raise ValueError("Já existe funcionário registrado com esse nome.")
-        funcionario = Funcionario(nome, cpf, next(self.__id), senha )
+        funcionario = Funcionario(nome, cpf, senha )
         self.__funcionarios.append(funcionario) #adicionando o funcioanrio na lista de cadastrados
 
     def remover_funcionario(self, id) -> None:
