@@ -228,7 +228,7 @@ Na primeira execução, o administrador é criado com os dados do `.env`. Na tel
 Para voltar ao começo (sem clientes, hospedagens e gastos, e com todos os quartos livres), dentro da pasta `Sistema/`:
 
 ```bash
-python -m database.resetar
+python -m database.resetar_banco
 ```
 
 O script pede a confirmação digitando `RESETAR`. O administrador e os quartos são mantidos. **A operação apaga os dados e não pode ser desfeita.**
