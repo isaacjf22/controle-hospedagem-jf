@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS hospedagens (
     id_cliente      INTEGER NOT NULL REFERENCES clientes(id),             
     numero_quarto   INTEGER NOT NULL REFERENCES quartos(numero_quarto),
     entrada         TIMESTAMP NOT NULL,
-    saida_prevista  TIMESTAMP NOT NULL,
+    saida_prevista  TIMESTAMP NOT NULL CHECK (saida_prevista > entrada),
     saida           TIMESTAMP,                 
     valor_total     NUMERIC(10,2)             
 );
