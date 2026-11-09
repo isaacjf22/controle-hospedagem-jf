@@ -1,2 +1,2 @@
-TRUNCATE gastos, hospedagens, clientes RESTART IDENTITY CASCADE;
+TRUNCATE gastos, hospedagens, clientes, funcionarios RESTART IDENTITY CASCADE;
 UPDATE quartos SET status = 'LIVRE';
