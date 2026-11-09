@@ -50,9 +50,9 @@ O projeto aplica herança, polimorfismo, composição, associação e dependênc
 - Um **DAO** por tabela, com o SQL escrito à mão. Os controladores deixam de usar listas em memória e passam a chamar os DAOs.
 - Senhas dos funcionários guardadas com **hash bcrypt**, nunca em texto puro.
 - Funcionário administrador criado automaticamente na primeira execução, com os dados lidos do arquivo `.env`.
-- Os 20 quartos cadastrados no banco por um script.
+- Os 20 quartos cadastrados no banco por um script (`criar_quartos`).
 - Configuração do banco (usuário, senha) fora do código, no arquivo `.env`, que não vai para o Git.
-- Script para **restaurar o sistema ao estado inicial**, útil para testes e demonstrações.
+- Script para **restaurar o sistema ao estado inicial** (`resetar_banco`), útil para testes e demonstrações.
 
 **Vídeo de apresentação (até 6 min):** *link em breve*
 
@@ -64,11 +64,11 @@ O projeto aplica herança, polimorfismo, composição, associação e dependênc
 
 ## Funcionalidades
 
-- **Funcionários:** cadastrar, atualizar (nome e senha), listar e remover. O administrador não pode ser removido.
-- **Login:** entrar e sair do sistema, com verificação de senha por hash.
+- **Funcionários:** cadastrar (com bloqueio de CPF e nome repetidos), atualizar (nome e senha), listar e remover. O único funcionário do sistema não pode ser removido.
+- **Login:** entrar (com nome e senha) e sair do sistema, com verificação de senha por hash.
 - **Clientes:** cadastrar (com validação de CPF e bloqueio de CPF repetido), atualizar, listar e remover. Um cliente com hospedagens registradas não pode ser removido.
-- **Quartos:** 20 quartos (10 simples e 10 duplos), com os estados livre, ocupado e em limpeza.
-- **Hospedagem:** check-in com comprovante, lançamento de consumo e check-out com extrato da conta (diárias mais consumo).
+- **Quartos:** 20 quartos (1 a 10 simples, com diária de R$ 250, e 11 a 20 duplos, com diária de R$ 500), com os estados livre, ocupado e em limpeza. Só um quarto livre pode ser ocupado.
+- **Hospedagem:** check-in com comprovante, lançamento de consumo e check-out com extrato da conta (diárias mais consumo). A data de saída e o valor total ficam gravados no banco.
 - **Limpeza:** enviar o quarto para limpeza ao fim da estadia e concluí-la.
 
 ## Arquitetura (ECB + DAO)
@@ -108,15 +108,18 @@ Sistema/
 ├── controllers/    Controladores (cliente, funcionário, login, quarto, hospedagem)
 │                   e o ControladorSistema, que monta o sistema e controla a navegação
 ├── dao/            DAOs: o acesso ao banco de cada entidade
-├── database/       Conexão com o banco e scripts (popular quartos, resetar)
+├── database/
+│   ├── conexao.py        Abre a conexão com o banco, lendo o .env
+│   ├── criar_quartos.py  Cadastra os 20 quartos (executa o quartos.sql)
+│   └── resetar_banco.py  Volta o sistema ao estado inicial (executa o resetar.sql)
 ├── entities/       Entidades do domínio
 │   ├── pessoas/    Pessoa (abstrata), Cliente e Funcionário
 │   └── quarto/     Quarto (abstrata), QuartoSimples e QuartoDuplo
+├── schema.sql      Criação das tabelas do banco
+├── quartos.sql     Cadastro dos 20 quartos
+├── resetar.sql     Apaga clientes, hospedagens e gastos e libera os quartos
 └── main.py         Ponto de entrada: só inicia o ControladorSistema
 UML/                Diagramas de classes e de casos de uso
-schema.sql          Criação das tabelas do banco
-quartos.sql         Cadastro dos 20 quartos
-resetar.sql         Volta o sistema ao estado inicial
 requirements.txt    Bibliotecas do projeto
 .env.example        Modelo do arquivo de configuração (sem senhas)
 LICENSE             Licença MIT
@@ -207,13 +210,17 @@ O arquivo `.env` guarda as senhas e **não vai para o Git** (está no `.gitignor
 
 **5. Criar as tabelas e os quartos**
 
+Os comandos deste passo em diante são executados **dentro da pasta `Sistema/`**, com o ambiente virtual ativo.
+
 ```bash
-psql -h localhost -U seu_usuario -d db_hotel -f schema.sql
 cd Sistema
-python -m database.popular_quartos
+psql -h localhost -U seu_usuario -d db_hotel -f schema.sql
+python -m database.criar_quartos
 ```
 
-O `schema.sql` cria as cinco tabelas, e o script cadastra os 20 quartos (1 a 10 simples, 11 a 20 duplos).
+O `schema.sql` cria as cinco tabelas (`clientes`, `funcionarios`, `quartos`, `hospedagens` e `gastos`), e o `criar_quartos` cadastra os 20 quartos. Os dois podem ser executados de novo sem duplicar nada.
+
+> O `-m` em `python -m database.criar_quartos` é necessário: ele faz o Python encontrar o pacote `database`. Rodar `python database/criar_quartos.py` dá `ModuleNotFoundError`.
 
 **6. Executar**
 
@@ -231,7 +238,7 @@ Para voltar ao começo (sem clientes, hospedagens e gastos, e com todos os quart
 python -m database.resetar_banco
 ```
 
-O script pede a confirmação digitando `RESETAR`. O administrador e os quartos são mantidos. **A operação apaga os dados e não pode ser desfeita.**
+O script pede a confirmação digitando `RESETAR` e executa o `resetar.sql`. Os funcionários e os quartos são mantidos, e os ids voltam a começar em 1. **A operação apaga os dados e não pode ser desfeita.**
 
 ### Problemas comuns
 
@@ -242,7 +249,9 @@ O script pede a confirmação digitando `RESETAR`. O administrador e os quartos 
 | `password authentication failed` | Usuário ou senha do `.env` não conferem com o banco | Corrigir o `.env` |
 | `relation "clientes" does not exist` | As tabelas não foram criadas | Rodar o `schema.sql` (passo 5) |
 | `Defina ADMIN_SENHA no arquivo .env.` | Faltam as variáveis do administrador | Preencher `ADMIN_*` no `.env` |
-| Lista de quartos vazia | Os quartos não foram cadastrados | Rodar `python -m database.popular_quartos` |
+| `Funcionário não encontrado.` no primeiro login | O nome digitado não é o do `ADMIN_NOME` | Usar o nome e a senha definidos no `.env` |
+| Lista de quartos vazia | Os quartos não foram cadastrados | Rodar `python -m database.criar_quartos` |
+| `ModuleNotFoundError: No module named 'database'` | O script foi executado fora da pasta `Sistema/` ou sem o `-m` | Entrar em `Sistema/` e usar `python -m database.<script>` |
 
 Para ver o sistema exatamente como estava em um nível, use o commit de entrega indicado na [tabela de níveis](#níveis-do-projeto).
 
