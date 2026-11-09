@@ -46,3 +46,9 @@ class ControladorFuncionario:
         #for funcionario in self.__funcionarios:
          #   print(f"{funcionario.id}) {funcionario.nome} - [{funcionario.cpf}]")
 
+    def garantir_primeiro_acesso(self, nome, cpf, senha):
+        if not self.__funcionario_dao.listar(): #se n tiver ninguem 
+            self.__funcionario_dao.inserir(Funcionario(nome,cpf,senha))
+
+
+

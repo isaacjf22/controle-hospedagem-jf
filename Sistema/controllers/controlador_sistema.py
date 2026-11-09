@@ -1,3 +1,6 @@
+import os
+
+
 #fronteiras 
 from boudaries.fronteira_realizar_login import RealizarLogin
 from boudaries.fronteira_hospedagem import RealizarHospedagem
@@ -38,6 +41,13 @@ class ControladorSistema:
         self.__ctl_login = ctl_login
         self.__f_realizar_login = f_realizar_login
         self.__f_realizar_hospedagem = f_realizar_hospedagem
+
+        senha = os.getenv("ADMIN_SENHA") #fora para realizar condicional 
+        if not senha:
+            print("Define uma senha para o admin no .env, como primeiro acesso.")
+            ctl_funcionario.garantir_primeiro_acesso(
+                os.getenv("ADMIN_NOME"),os.getenv("ADMIN_CPF"),senha
+            )
 
     def inicio(self):
         while True: 
