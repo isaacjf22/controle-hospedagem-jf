@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 
 
 #fronteiras 
@@ -42,12 +43,15 @@ class ControladorSistema:
         self.__f_realizar_login = f_realizar_login
         self.__f_realizar_hospedagem = f_realizar_hospedagem
 
+        load_dotenv()
+
         senha = os.getenv("ADMIN_SENHA") #fora para realizar condicional 
         if not senha:
             print("Define uma senha para o admin no .env, como primeiro acesso.")
-            ctl_funcionario.garantir_primeiro_acesso(
-                os.getenv("ADMIN_NOME"),os.getenv("ADMIN_CPF"),senha
-            )
+            
+        ctl_funcionario.garantir_primeiro_acesso(
+            os.getenv("ADMIN_NOME"),os.getenv("ADMIN_CPF"),senha
+        )
 
     def inicio(self):
         while True: 

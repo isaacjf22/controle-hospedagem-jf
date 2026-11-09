@@ -19,7 +19,7 @@ class FuncionarioDAO:
     def listar(self):
         with conectar() as con:
             funcionarios = con.execute(
-                "SELECT id, nome , cpf , senha_hash FROM funcionarios ORDE BY id"
+                "SELECT id, nome , cpf , senha_hash FROM funcionarios ORDER BY id"
             ).fetchall()
         resultado = []
         for funcionario in funcionarios:
