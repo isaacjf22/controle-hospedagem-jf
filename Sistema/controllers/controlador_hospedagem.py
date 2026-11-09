@@ -41,7 +41,7 @@ class ControladorHospedagem:
         dias = hospedagem.finalizar()
         total = self.__calcular_total(idHospedagem,quarto, dias)
         hospedagem.definir_total(total)
-        self.__hospedagem_dao.check_out(idHospedagem,hospedagem.saida,hospedagem.valor_total) #segue a ordem do caso de uso
+        self.__hospedagem_dao.check_out(idHospedagem,hospedagem.saida,hospedagem.valorTotal) #segue a ordem do caso de uso
         self.__ctlQuarto.realizar_limpeza(quarto.numeroQuarto)
         return hospedagem.gerar_extrato()
     

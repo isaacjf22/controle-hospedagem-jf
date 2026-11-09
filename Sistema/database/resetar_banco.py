@@ -9,7 +9,7 @@ def resetar():
         print("Cancelado.")
         return
 
-    sql = (Path(__file__).resolve().parents[2] / "resetar.sql").read_text(encoding="utf-8")
+    sql = (Path(__file__).resolve().parents[1] / "resetar.sql").read_text(encoding="utf-8")
     with conectar() as con:
         con.execute(cast(LiteralString, sql))
     print("Sistema restaurado ao estado inicial.")
