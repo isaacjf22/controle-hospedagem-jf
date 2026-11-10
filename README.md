@@ -16,8 +16,8 @@ O projeto aplica herança, polimorfismo, composição, associação e dependênc
 |:---:|---|---|---------------|----------------------|:---:|
 | **1** | Modelagem em UML (diagrama de classes e de casos de uso) e implementação das classes, testando todas as funcionalidades por meio de um roteiro de testes | Terminal (`main.py`) | [Assistir](https://youtu.be/cp6dItPyFN4) | `nivel 1 concluído`  | Concluído |
 | **2** | Menu funcional: o usuário navega pelas funcionalidades do sistema | Terminal (menu) | [Assistir](https://youtu.be/zp3Zvf0HFk8) | `nivel 2 concluído` | Concluído |
-| **3** | Persistência dos dados em banco de dados (PostgreSQL) | Terminal (menu) | Em breve      | `nivel-3: concluído` | Em andamento |
-| **4** | Interface gráfica, com o sistema funcionando em janelas | Janelas (GUI) | Em breve      | `nivel-4: concluído` | Pendente |
+| **3** | Persistência dos dados em banco de dados (PostgreSQL) | Terminal (menu) | [Assistir](https://youtu.be/ITBI0W5QPuc) | `nivel 3 concluído` | Concluído |
+| **4** | Interface gráfica, com o sistema funcionando em janelas | Janelas (GUI) | Em breve      | `nivel 4 concluído` | Pendente |
 
 > **Como ler a tabela:** a coluna *Commit de entrega* mostra o nome do commit que marca o nível finalizado. Para ver o projeto naquele momento, basta procurar esse commit (ou a tag de mesmo nome) no histórico.
 
@@ -54,7 +54,7 @@ O projeto aplica herança, polimorfismo, composição, associação e dependênc
 - Configuração do banco (usuário, senha) fora do código, no arquivo `.env`, que não vai para o Git.
 - Script para **restaurar o sistema ao estado inicial** (`resetar_banco`), útil para testes e demonstrações.
 
-**Vídeo de apresentação (até 6 min):** *link em breve*
+**Vídeo de apresentação (até 6 min):** [assistir no YouTube](https://youtu.be/ITBI0W5QPuc)
 
 ### Nível 4: Interface gráfica
 
