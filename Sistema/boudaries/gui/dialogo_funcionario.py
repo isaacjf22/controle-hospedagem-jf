@@ -1,10 +1,11 @@
 from PySide6.QtWidgets import QWidget , QTableWidget , QLabel, QAbstractItemView, QPushButton , QHBoxLayout, QVBoxLayout, QHeaderView, QDialog, QLineEdit, QCheckBox, QFormLayout, QDialogButtonBox, QMessageBox
 from controllers.controlador_funcionario import ControladorFuncionario
 from entities.pessoas.funcionario import Funcionario
+from controllers.controlador_funcionario import ControladorFuncionario
 
 
 class DialogoFuncionario(QDialog):
-    def __init__(self, ctl_funcionario , parent=None, funcionario: Funcionario | None = None):
+    def __init__(self, ctl_funcionario : ControladorFuncionario  , parent=None, funcionario: Funcionario | None = None):
         super().__init__(parent) #vai puxar caracteristicas da tela q abriu
         self.__ctl_funcionario = ctl_funcionario
         self.__funcionario = funcionario
@@ -43,7 +44,7 @@ class DialogoFuncionario(QDialog):
         botoes.button(QDialogButtonBox.StandardButton.Save).setText("Salvar")
         botoes.button(QDialogButtonBox.StandardButton.Cancel).setText("Cancelar")
         botoes.accepted.connect(self.salvar)
-        botoes.rejected.connect(self.rejected)
+        botoes.rejected.connect(self.reject)
         
 
 
@@ -57,9 +58,9 @@ class DialogoFuncionario(QDialog):
         senha = self.linha_senha.text()
         try:
             if self.__editando and self.__funcionario is not None:
-                self.__ctl_funcionario.atualizar_funcionario(self.__funcionario.id ,nome, cpf, senha)
+                self.__ctl_funcionario.atualizar_funcionario(self.__funcionario.id, nome=nome, senha=senha)
             else:
-                self.__ctl_funcionario.cadastrar_funcionario(nome, cpf, senha)
+                self.__ctl_funcionario.cadastrar_funcionario(nome,cpf,senha)
         except ValueError as e:
             QMessageBox.critical(self, "Erro", str(e))
             return
