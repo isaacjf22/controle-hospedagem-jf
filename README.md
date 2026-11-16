@@ -2,7 +2,7 @@
 
 Sistema de gerenciamento de hospedagem de um hotel, desenvolvido em **Python** para a disciplina **Orientação a Objetos** do **Prof. Henrique Moura** (UnB).
 
-O projeto evolui em quatro níveis. Cada nível entregue é marcado por um commit próprio, e o histórico do repositório mostra o sistema crescendo de um nível para o outro.
+O projeto evoluiu em quatro níveis e está **finalizado**: o sistema funciona em janelas, com os dados guardados em banco de dados. Cada nível entregue é marcado por um commit próprio, e o histórico do repositório mostra o sistema crescendo de um nível para o outro.
 
 ## Finalidade
 
@@ -17,7 +17,7 @@ O projeto aplica herança, polimorfismo, composição, associação e dependênc
 | **1** | Modelagem em UML (diagrama de classes e de casos de uso) e implementação das classes, testando todas as funcionalidades por meio de um roteiro de testes | Terminal (`main.py`) | [Assistir](https://youtu.be/cp6dItPyFN4) | `nivel 1 concluído`  | Concluído |
 | **2** | Menu funcional: o usuário navega pelas funcionalidades do sistema | Terminal (menu) | [Assistir](https://youtu.be/zp3Zvf0HFk8) | `nivel 2 concluído` | Concluído |
 | **3** | Persistência dos dados em banco de dados (PostgreSQL) | Terminal (menu) | [Assistir](https://youtu.be/ITBI0W5QPuc) | `nivel 3 concluído` | Concluído |
-| **4** | Interface gráfica, com o sistema funcionando em janelas | Janelas (GUI) | Em breve      | `nivel 4 concluído` | Pendente |
+| **4** | Interface gráfica, com o sistema funcionando em janelas | Janelas (GUI) | [Assistir](https://youtu.be/F9C9xiSNnkc) | `nivel 4 concluído` | Concluído |
 
 > **Como ler a tabela:** a coluna *Commit de entrega* mostra o nome do commit que marca o nível finalizado. Para ver o projeto naquele momento, basta procurar esse commit (ou a tag de mesmo nome) no histórico.
 
@@ -60,7 +60,15 @@ O projeto aplica herança, polimorfismo, composição, associação e dependênc
 
 **Propósito:** substituir o terminal por janelas, mantendo as mesmas funcionalidades.
 
-**Vídeo de apresentação (até 6 min):** *link em breve*
+- Interface gráfica feita com **PySide6** (Qt para Python).
+- Tela de login e janela principal com a lista de hospedagens ativas.
+- Janelas próprias para check-in (escolha do cliente, do quarto livre e da data de saída), clientes, funcionários e limpeza de quartos.
+- Caixas de diálogo para cadastrar e atualizar clientes e funcionários, lançar consumo e exibir o comprovante e o extrato da conta.
+- Erros das regras de negócio mostrados em mensagens na tela, sem fechar o programa.
+- Logout ao fechar a janela principal, voltando à tela de login.
+- Só as fronteiras mudaram: entidades, controladores e DAOs são os mesmos do Nível 3.
+
+**Vídeo de apresentação (até 6 min):** [assistir no YouTube](https://youtu.be/F9C9xiSNnkc)
 
 ## Funcionalidades
 
@@ -84,10 +92,10 @@ O fluxo de uma ação no sistema é:
 
 ```
 Fronteira  →  Controlador  →  DAO  →  PostgreSQL
- (menu)       (regras)       (SQL)    (tabelas)
+(janelas)     (regras)       (SQL)    (tabelas)
 ```
 
-O **`ControladorSistema`** cria os DAOs, controladores e telas e entrega a mesma instância a quem precisa. Ele também controla a navegação: abre o login e, depois do login, abre o menu do sistema. Assim, o `main.py` fica sem lógica e apenas inicia o sistema.
+O **`ControladorSistema`** cria os DAOs, controladores e telas e entrega a mesma instância a quem precisa. Ele também cria o `QApplication` e as janelas e abre a tela de login; a navegação entre as janelas é feita por sinais (`Signal`) do Qt. Assim, o `main.py` fica sem lógica e apenas inicia o sistema.
 
 A conexão com o banco é aberta pela função `conectar()` (em `Sistema/database/conexao.py`), que lê as credenciais do arquivo `.env`.
 
@@ -104,7 +112,8 @@ Os diagramas do sistema estão na pasta [`UML/`](./UML):
 
 ```
 Sistema/
-├── boudaries/      Fronteiras: as telas do menu no terminal (login e hospedagem)
+├── boudaries/      Fronteiras: menus do terminal (níveis 2 e 3)
+│   └── gui/        Janelas e diálogos da interface gráfica (Nível 4)
 ├── controllers/    Controladores (cliente, funcionário, login, quarto, hospedagem)
 │                   e o ControladorSistema, que monta o sistema e controla a navegação
 ├── dao/            DAOs: o acesso ao banco de cada entidade
@@ -150,9 +159,9 @@ O `main.py` é o ponto de entrada e o seu comportamento depende do nível:
 
 **Primeiro acesso (Nível 2):** o sistema começa sem funcionários, e os dados ficam só na memória enquanto o programa está aberto. Na tela inicial, entre em *Gerenciar funcionários* e cadastre um funcionário (CPF com 11 dígitos e senha com pelo menos 4 caracteres). Depois, use o nome e a senha dele em *Realizar login*.
 
-### Nível 3 (com banco de dados)
+### Níveis 3 e 4 (com banco de dados)
 
-**Requisitos:** Python 3.11 ou mais novo e PostgreSQL 12 ou mais novo.
+**Requisitos:** Python 3.11 ou mais novo e PostgreSQL 12 ou mais novo. As bibliotecas, incluindo o **PySide6** da interface gráfica, são instaladas pelo `requirements.txt`.
 
 **1. Baixar o projeto e preparar o ambiente**
 
@@ -228,7 +237,7 @@ O `schema.sql` cria as cinco tabelas (`clientes`, `funcionarios`, `quartos`, `ho
 python main.py
 ```
 
-Na primeira execução, o administrador é criado com os dados do `.env`. Na tela inicial, escolha *Realizar login* e use o nome e a senha definidos em `ADMIN_NOME` e `ADMIN_SENHA`. A senha fica guardada como hash no banco e só pode ser trocada depois pelo menu, em *Gerenciar funcionários*.
+Na primeira execução, o administrador é criado com os dados do `.env`. Na tela de login, use o nome e a senha definidos em `ADMIN_NOME` e `ADMIN_SENHA`. A senha fica guardada como hash no banco e pode ser trocada depois na janela *Funcionários*.
 
 ### Restaurar o sistema ao estado inicial
 
@@ -245,10 +254,10 @@ O script pede a confirmação digitando `RESETAR` e executa o `resetar.sql`. Os 
 | Mensagem ou sintoma | Causa provável | Solução |
 |---|---|---|
 | `Não foi possível conectar ao banco de dados` | O PostgreSQL não está rodando, ou o `.env` está errado | Iniciar o serviço (`sudo systemctl start postgresql`) e conferir o `.env` |
-| `ModuleNotFoundError: No module named 'psycopg'` | O ambiente virtual não está ativo | Ativar o `.venv` e rodar `pip install -r requirements.txt` |
+| `ModuleNotFoundError: No module named 'psycopg'` ou `'PySide6'` | O ambiente virtual não está ativo | Ativar o `.venv` e rodar `pip install -r requirements.txt` |
 | `password authentication failed` | Usuário ou senha do `.env` não conferem com o banco | Corrigir o `.env` |
 | `relation "clientes" does not exist` | As tabelas não foram criadas | Rodar o `schema.sql` (passo 5) |
-| `Defina ADMIN_SENHA no arquivo .env.` | Faltam as variáveis do administrador | Preencher `ADMIN_*` no `.env` |
+| `Defina ADMIN_NOME, ADMIN_CPF e ADMIN_SENHA no .env antes do primeiro acesso.` | Faltam as variáveis do administrador | Preencher `ADMIN_*` no `.env` |
 | `Funcionário não encontrado.` no primeiro login | O nome digitado não é o do `ADMIN_NOME` | Usar o nome e a senha definidos no `.env` |
 | Lista de quartos vazia | Os quartos não foram cadastrados | Rodar `python -m database.criar_quartos` |
 | `ModuleNotFoundError: No module named 'database'` | O script foi executado fora da pasta `Sistema/` ou sem o `-m` | Entrar em `Sistema/` e usar `python -m database.<script>` |
