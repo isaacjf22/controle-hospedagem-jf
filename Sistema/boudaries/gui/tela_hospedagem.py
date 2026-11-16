@@ -1,3 +1,4 @@
+from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QWidget , QTableWidget , QLabel, QAbstractItemView, QPushButton , QHBoxLayout, QVBoxLayout, QHeaderView, QMessageBox , QTableWidgetItem
 from PySide6.QtCore import Qt, Signal
 
@@ -8,8 +9,11 @@ from boudaries.gui.tela_funcionarios import TelaFuncionario
 from boudaries.gui.tela_checkin import TelaCheckin
 from boudaries.gui.tela_limpeza import TelaLimpeza
 from boudaries.gui.dialogo_comprovante import DialogoComprovante
+from boudaries.gui.dialogo_consumo import DialogoConsumo
 
 class TelaHospedagem(QWidget):
+    voltar = Signal()
+
     def __init__(self, ctl_hospedagem : ControladorHospedagem, tela_cliente : TelaCliente, tela_funcionario : TelaFuncionario, tela_checkin : TelaCheckin, tela_limpeza : TelaLimpeza):
         self.__ctl_hospedagem = ctl_hospedagem
         self.__tela_cliente = tela_cliente
@@ -62,9 +66,10 @@ class TelaHospedagem(QWidget):
 
 
         self.botao_limpeza = QPushButton("Concluir Limpeza") #DialogueBox
-        self.botao_limpeza.clicked.connect(self.abrir_limepeza)
+        self.botao_limpeza.clicked.connect(self.abrir_limpeza)
 
         self.botao_consumo = QPushButton("Adicionar Consumo") #DialogueBox
+        self.botao_consumo.clicked.connect(self.adicionar_consumo)
 
         self.botao_clientes = QPushButton("Clientes") #Janela 
         self.botao_clientes.clicked.connect(self.abrir_cliente)
@@ -73,6 +78,7 @@ class TelaHospedagem(QWidget):
         self.botao_funcionarios.clicked.connect(self.abrir_funcionario)
 
         self.botao_sair = QPushButton("Sair")
+        self.botao_sair.clicked.connect(self.close)
 
         for b in (self.botao_checkin, self.botao_checkout, self.botao_limpeza, self.botao_consumo, self.botao_clientes, self.botao_funcionarios , self.botao_sair):
             layoutBotoes.addWidget(b)
@@ -84,7 +90,13 @@ class TelaHospedagem(QWidget):
         layoutPrincipal.addWidget(self.textoPergunta)
         layoutPrincipal.addLayout(layoutBotoes)
 
+        self.atualizar_lista()
 
+
+
+    def closeEvent(self, event: QCloseEvent) -> None:
+        self.voltar.emit()
+        return super().closeEvent(event)
 
 
     def atualizar_lista(self):
@@ -102,6 +114,7 @@ class TelaHospedagem(QWidget):
         id = self.id_selecionado()
         if id is None:
             QMessageBox.warning(self,"Aviso","Selecione uma hospedagem ativa")
+            return
         try:
             extrato = self.__ctl_hospedagem.realizar_checkout(id)
             DialogoComprovante(extrato, "EXTRATO DE CONTA", self).exec()
@@ -115,12 +128,24 @@ class TelaHospedagem(QWidget):
         self.__tela_checkin.preparar()
         self.__tela_checkin.show()
 
-    def abrir_limepeza(self):
+    def abrir_limpeza(self):
         self.hide()
         self.__tela_limpeza.atualizar_lista()
         self.__tela_limpeza.show()
 
-
+    def adicionar_consumo(self):
+        id_hospedagem = self.id_selecionado()
+        if id_hospedagem is None:
+            QMessageBox.warning(self, "Aviso", "Selecione uma hospedagem ativa")
+            return
+        linha = self.lista.currentRow()
+        item_cliente = self.lista.item(linha, 0)
+        item_quarto = self.lista.item(linha, 1)
+        if item_cliente is None or item_quarto is None:
+            return
+        resumo = f"{item_cliente.text()} - Quarto {item_quarto.text()}"
+        if DialogoConsumo(self.__ctl_hospedagem, id_hospedagem, resumo, self).exec():
+            self.atualizar_lista()
 
     def abrir_cliente(self):
         self.hide()
@@ -139,6 +164,7 @@ class TelaHospedagem(QWidget):
         item = self.lista.item(id, 0)
         if item is not None:
             return item.data(Qt.ItemDataRole.UserRole)
+
 
     
 

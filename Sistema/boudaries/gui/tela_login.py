@@ -5,11 +5,15 @@ from PySide6.QtCore import Qt
 
 
 from controllers.controlador_login  import ControladorLogin
+from boudaries.gui.tela_hospedagem import TelaHospedagem
 
 class TelaLogin(QWidget):
-    def __init__(self, ctl_login):
+    def __init__(self, ctl_login, tela_hospedagem : TelaHospedagem):
         super().__init__()
         self.__ctl_login = ctl_login
+        self.__tela_hospedagem = tela_hospedagem
+
+        self.__tela_hospedagem.voltar.connect(self.reabrir)
         self.setWindowTitle("HOSPEDAGEM JF - LOGIN")
         self.setFixedSize(350,250)
 
@@ -30,7 +34,10 @@ class TelaLogin(QWidget):
         self.linha_senha = QLineEdit()
         self.linha_senha.setEchoMode(QLineEdit.EchoMode.Password)
         self.check_senha = QCheckBox("Mostrar")
-        self.check_senha.toggled.connect(self.mostrar_senha)      
+        self.check_senha.toggled.connect(self.mostrar_senha)     
+
+        self.linha_nome.returnPressed.connect(self.entrar) #aceitar ENTER 
+        self.linha_senha.returnPressed.connect(self.entrar) 
         
 
         linhaSenha = QVBoxLayout()
@@ -69,10 +76,21 @@ class TelaLogin(QWidget):
 
     def entrar(self):
         try:
-            self.__ctl_login.login(self.linha_nome.text(), self.linha_senha.text())
+            self.__ctl_login.login(self.linha_nome.text(), self.linha_senha.text()) #oq pode dar ruim 
         except ValueError as e:
             QMessageBox.critical(self, "Erro", str(e))
             return
+        self.hide()
+        self.__tela_hospedagem.atualizar_lista()
+        self.__tela_hospedagem.show()
+
+    def reabrir(self): #limpando os dados 
+        self.__ctl_login.logout()              # limpa o funcionário logado
+        self.linha_nome.clear()
+        self.linha_senha.clear()
+        self.check_senha.setChecked(False)     # volta a esconder a senha
+        self.linha_nome.setFocus()
+        self.show()
         
 
 
