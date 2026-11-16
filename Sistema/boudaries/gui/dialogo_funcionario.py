@@ -1,5 +1,4 @@
-from PySide6.QtWidgets import QWidget , QTableWidget , QLabel, QAbstractItemView, QPushButton , QHBoxLayout, QVBoxLayout, QHeaderView, QDialog, QLineEdit, QCheckBox, QFormLayout, QDialogButtonBox, QMessageBox
-from controllers.controlador_funcionario import ControladorFuncionario
+from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QDialog, QLineEdit, QCheckBox, QFormLayout, QDialogButtonBox, QMessageBox
 from entities.pessoas.funcionario import Funcionario
 from controllers.controlador_funcionario import ControladorFuncionario
 
@@ -17,6 +16,7 @@ class DialogoFuncionario(QDialog):
 
         #entradas
         self.linha_nome = QLineEdit()
+        self.linha_nome.setMaxLength(50) #mesmo tamanho da coluna no banco
 
         self.linha_cpf = QLineEdit()
         self.linha_cpf.setMaxLength(11)
@@ -33,6 +33,7 @@ class DialogoFuncionario(QDialog):
             self.linha_nome.setText(funcionario.nome)
             self.linha_cpf.setText(funcionario.cpf)
             self.linha_cpf.setReadOnly(True) 
+            self.linha_senha.setPlaceholderText("deixe vazio para manter")
 
         formulario = QFormLayout()
         formulario.addRow("Nome:", self.linha_nome)

@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget , QTableWidget , QLabel, QAbstractItemView, QPushButton , QHBoxLayout, QVBoxLayout, QHeaderView, QMessageBox , QTableWidgetItem
 from PySide6.QtCore import Qt, Signal
 
-from gui.dialogo_cliente import DialogoCliente
+from boudaries.gui.dialogo_cliente import DialogoCliente
 
 from controllers.controlador_cliente import ControladorCliente
 
@@ -72,7 +72,11 @@ class TelaCliente(QWidget):
         if id is None:
             QMessageBox.warning(self,"Aviso","Selecione um cliente")
             return
-        cliente = self.__ctl_cliente.buscar_cliente(id)
+        try:
+            cliente = self.__ctl_cliente.buscar_cliente(id)
+        except ValueError as e:
+            QMessageBox.critical(self, "Erro", str(e))
+            return
         dialogo = DialogoCliente(self.__ctl_cliente,self,cliente=cliente)
         if dialogo.exec():
             self.atualizar_lista()

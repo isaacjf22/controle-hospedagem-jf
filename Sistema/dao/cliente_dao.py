@@ -43,7 +43,7 @@ class ClienteDAO:
                     "DELETE FROM clientes WHERE id = %s" , (id,)
                 )
             except psycopg.errors.ForeignKeyViolation:
-                raise ValueError("Não é possível concluir.")
+                raise ValueError("Cliente possui hospedagens registradas e não pode ser removido.")
 
     def __montar(self, retorno): #transforma o dado em objeto 
         return Cliente(nome=retorno[1], cpf=retorno[2], id=retorno[0])

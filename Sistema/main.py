@@ -1,10 +1,9 @@
 from controllers.controlador_sistema import ControladorSistema
 import psycopg
 
-ctl_sistema = ControladorSistema()
-
 def main():
     try:
+        ctl_sistema = ControladorSistema() #dentro do try: o construtor ja acessa o banco
         ctl_sistema.inicio()
     except psycopg.OperationalError:
         print("Não foi possível conectar ao banco de dados.")

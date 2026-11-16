@@ -3,6 +3,7 @@ from entities.extrato_conta import ExtratoConta
 from entities.gasto import Gasto
 
 from datetime import datetime
+from entities.status import Status
 
 
 from entities.hospedagem import Hospedagem
@@ -27,6 +28,8 @@ class ControladorHospedagem:
 
         cliente = self.__ctlCliente.buscar_cliente(idCliente)
         quarto = self.__ctlQuarto.buscar_quarto(numeroQuarto)
+        if quarto.statusQuarto != Status.LIVRE: #valida ANTES de gravar no banco
+            raise ValueError("Esse quarto não está livre.")
         hospedagem = Hospedagem(entrada,saidaPrevista, cliente, quarto)
 
        

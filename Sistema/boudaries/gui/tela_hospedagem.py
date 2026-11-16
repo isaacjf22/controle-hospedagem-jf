@@ -15,16 +15,17 @@ class TelaHospedagem(QWidget):
     voltar = Signal()
 
     def __init__(self, ctl_hospedagem : ControladorHospedagem, tela_cliente : TelaCliente, tela_funcionario : TelaFuncionario, tela_checkin : TelaCheckin, tela_limpeza : TelaLimpeza):
+        super().__init__()
         self.__ctl_hospedagem = ctl_hospedagem
         self.__tela_cliente = tela_cliente
         self.__tela_funcionario = tela_funcionario
         self.__tela_checkin = tela_checkin
         self.__tela_limpeza = tela_limpeza
 
-        self.__tela_cliente.voltar.connect(self.show)
-        self.__tela_funcionario.voltar.connect(self.show)
-        self.__tela_checkin.voltar.connect(self.show)
-        self.__tela_limpeza.voltar.connect(self.show)
+        self.__tela_cliente.voltar.connect(self.voltar_para_menu)
+        self.__tela_funcionario.voltar.connect(self.voltar_para_menu)
+        self.__tela_checkin.voltar.connect(self.voltar_para_menu)
+        self.__tela_limpeza.voltar.connect(self.voltar_para_menu)
 
         self.resize(1100,650)
         self.setMinimumSize(900,550)
@@ -94,6 +95,10 @@ class TelaHospedagem(QWidget):
 
 
 
+    def voltar_para_menu(self): #ao voltar de outra tela, recarrega as hospedagens ativas
+        self.atualizar_lista()
+        self.show()
+
     def closeEvent(self, event: QCloseEvent) -> None:
         self.voltar.emit()
         return super().closeEvent(event)
@@ -111,17 +116,17 @@ class TelaHospedagem(QWidget):
             self.lista.setItem(linha, 3, QTableWidgetItem(h.saidaPrevista.strftime("%d/%m/%Y")))
 
     def realizar_checkout(self):
-        id = self.id_selecionado()
-        if id is None:
+        id_hospedagem = self.id_selecionado()
+        if id_hospedagem is None:
             QMessageBox.warning(self,"Aviso","Selecione uma hospedagem ativa")
             return
         try:
-            extrato = self.__ctl_hospedagem.realizar_checkout(id)
-            DialogoComprovante(extrato, "EXTRATO DE CONTA", self).exec()
-            self.atualizar_lista()
+            extrato = self.__ctl_hospedagem.realizar_checkout(id_hospedagem)
         except ValueError as e:
             QMessageBox.critical(self,"Erro",str(e))
             return
+        DialogoComprovante(str(extrato), "EXTRATO DE CONTA", self).exec() #str() transforma o objeto em texto
+        self.atualizar_lista()
 
     def abrir_checkin(self):
         self.hide()

@@ -27,7 +27,7 @@ class HospedagemDAO:
             hospedagem = con.execute(
                 "SELECT id, id_cliente, numero_quarto, saida_prevista, entrada FROM hospedagens WHERE id = %s", (idHospedagem,)
             ).fetchone()
-        return self.__montar(hospedagem)
+        return self.__montar(hospedagem) if hospedagem else None
 
     def listar(self):
         with conectar() as con:

@@ -1,5 +1,4 @@
-from PySide6.QtWidgets import QWidget , QTableWidget , QLabel, QAbstractItemView, QPushButton , QHBoxLayout, QVBoxLayout, QHeaderView, QDialog, QLineEdit, QCheckBox, QFormLayout, QDialogButtonBox, QMessageBox
-from controllers.controlador_funcionario import ControladorFuncionario
+from PySide6.QtWidgets import QVBoxLayout, QDialog, QLineEdit, QFormLayout, QDialogButtonBox, QMessageBox
 from entities.pessoas.cliente import Cliente
 from controllers.controlador_cliente import ControladorCliente
 
@@ -17,6 +16,7 @@ class DialogoCliente(QDialog):
 
         #entradas
         self.linha_nome = QLineEdit()
+        self.linha_nome.setMaxLength(50) #mesmo tamanho da coluna no banco
 
         self.linha_cpf = QLineEdit()
         self.linha_cpf.setMaxLength(11)

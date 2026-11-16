@@ -1,6 +1,6 @@
-from PySide6.QtGui import QCloseEvent
-from PySide6.QtWidgets import QWidget , QTableWidget , QLabel, QAbstractItemView, QPushButton , QHBoxLayout, QVBoxLayout, QHeaderView, QMessageBox , QTableWidgetItem, QLineEdit, QDateEdit, QFormLayout
+from PySide6.QtWidgets import QWidget , QTableWidget , QLabel, QAbstractItemView, QPushButton , QHBoxLayout, QVBoxLayout, QHeaderView, QMessageBox , QTableWidgetItem, QDateEdit, QFormLayout
 from PySide6.QtCore import Qt, Signal, QDate
+from datetime import datetime, time
 
 from controllers.controlador_cliente import ControladorCliente
 from controllers.controlador_quarto import ControladorQuarto
@@ -8,7 +8,6 @@ from controllers.controlador_hospedagem import ControladorHospedagem
 
 from boudaries.gui.dialogo_comprovante import DialogoComprovante
 
-from entities.quarto.quarto import Quarto
 from entities.status import Status
 
 class TelaCheckin(QWidget):
@@ -84,6 +83,7 @@ class TelaCheckin(QWidget):
         data = QFormLayout()
         self.linha_realizar = QDateEdit(QDate.currentDate().addDays(1)) #ja tem um valor padrao
         self.linha_realizar.setCalendarPopup(True) #permite a alteração da data por meio do calendario 
+        self.linha_realizar.setDisplayFormat("dd/MM/yyyy") #mostra a data com barras
         self.linha_realizar.setMinimumDate(QDate.currentDate().addDays(1)) #minimo de 1 dia 
         data.addRow("Saida prevista:", self.linha_realizar)
 
@@ -107,7 +107,10 @@ class TelaCheckin(QWidget):
         self.preparar()
 
 
-    def preparar(self):         
+    def preparar(self):
+        amanha = QDate.currentDate().addDays(1) #recalcula toda vez que a tela abre
+        self.linha_realizar.setMinimumDate(amanha)
+        self.linha_realizar.setDate(amanha)
         self.atualizar_clientes()
         self.atualizar_quarto()
 
@@ -117,13 +120,8 @@ class TelaCheckin(QWidget):
         return super().closeEvent(event)
 
     def realizar_checkin(self):
-        nQ = None
-        idC = None
-        try:    
-            nQ = self.id_selecionado_quarto()
-            idC = self.id_selecionado_cliente()
-        except ValueError as e:
-            QMessageBox.critical(self, "Erro", str(e))
+        nQ = self.id_selecionado_quarto()
+        idC = self.id_selecionado_cliente()
         if idC is None:
             QMessageBox.warning(self, "Aviso","Selecione um cliente")
             return
@@ -132,12 +130,14 @@ class TelaCheckin(QWidget):
             QMessageBox.warning(self, "Aviso","Selecione um quarto")
             return
         try:
-            comprovante = self.__ctl_hospedagem.realizar_checkin(idC,nQ,self.linha_realizar.date().toPython())
-            dialogo = DialogoComprovante(comprovante, "COMPROVANTE HOSPEDAGEM", self).exec()
-            self.preparar()
-
+            #date (só o dia) + horario de saida = datetime, o mesmo tipo da entrada
+            saida = datetime.combine(self.linha_realizar.date().toPython(), time(12, 0))
+            comprovante = self.__ctl_hospedagem.realizar_checkin(idC, nQ, saida)
         except ValueError as e:
             QMessageBox.critical(self, "Erro", str(e))
+            return
+        DialogoComprovante(str(comprovante), "COMPROVANTE HOSPEDAGEM", self).exec() #str() transforma o objeto em texto
+        self.preparar()
 
 
 

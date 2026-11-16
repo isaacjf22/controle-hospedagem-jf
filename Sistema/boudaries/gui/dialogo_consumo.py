@@ -22,7 +22,7 @@ class DialogoConsumo(QDialog):
         #CAMPOS
         self.campo_produto = QLineEdit()
         self.campo_produto.setPlaceholderText("Ex.: Água, Refrigerante, Lavanderia")
-        self.campo_produto.setMaxLength(60)
+        self.campo_produto.setMaxLength(30)   #mesmo tamanho da coluna no banco
 
         self.campo_quantidade = QSpinBox()
         self.campo_quantidade.setRange(1, 999)

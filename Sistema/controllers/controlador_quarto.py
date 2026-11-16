@@ -1,5 +1,3 @@
-from entities.quarto.quarto_simples import QuartoSimples
-from entities.quarto.quarto_duplo import QuartoDuplo
 from entities.status import Status
 from dao.quarto_dao import QuartoDAO
 

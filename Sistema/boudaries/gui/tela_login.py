@@ -4,7 +4,6 @@ from PySide6.QtWidgets import QMessageBox
 from PySide6.QtCore import Qt
 
 
-from controllers.controlador_login  import ControladorLogin
 from boudaries.gui.tela_hospedagem import TelaHospedagem
 
 class TelaLogin(QWidget):

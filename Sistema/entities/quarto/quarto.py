@@ -4,12 +4,17 @@ from entities.status import Status
 class Quarto(ABC):
     #construtor
     def __init__(self, numeroQuarto, status = Status.LIVRE, id=None):
+        self._id = id
         self._numeroQuarto = numeroQuarto
         self._statusQuarto = status
 
 
     #encapsulamento
     #definindo somente visualização
+    @property
+    def id(self):
+        return self._id
+
     @property
     def numeroQuarto(self):
         return self._numeroQuarto

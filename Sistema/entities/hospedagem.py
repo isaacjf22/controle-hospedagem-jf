@@ -59,10 +59,10 @@ class Hospedagem:
 
         
     def gerar_comprovante(self) -> ComprovanteHospedagem:
-        return ComprovanteHospedagem(self.__cliente.nome,self.__cliente.cpf,self.__entrada,self.__saidaPrevista, self.__quarto.numeroQuarto)
+        return ComprovanteHospedagem(self.__cliente.nome,self.__cliente.cpf_formatado,self.__entrada,self.__saidaPrevista, self.__quarto.numeroQuarto)
 
     def gerar_extrato(self) -> ExtratoConta:
-        extrato = ExtratoConta(self.__cliente.nome, self.__cliente.cpf, self.__saida, self.__valorTotal)
+        extrato = ExtratoConta(self.__cliente.nome, self.__cliente.cpf_formatado, self.__saida, self.__valorTotal)
         return extrato
 
     def finalizar(self):

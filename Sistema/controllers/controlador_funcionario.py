@@ -24,12 +24,19 @@ class ControladorFuncionario:
 
     def atualizar_funcionario(self, id, nome=None, senha=None) -> None:
         funcionario = self.buscar(id) # verifica se existe
+        novo_hash = None
+        #1° valida tudo
         if nome is not None:
             funcionario.nome = nome
-            self.__funcionario_dao.atualizar_nome(nome, id)
-        if senha is not None:
-            novo = funcionario.alterar_senha(senha)
-            self.__funcionario_dao.atualizar_senha(novo,id)
+            if any(f.nome == funcionario.nome and f.id != id for f in self.__funcionario_dao.listar()):
+                raise ValueError("Já existe funcionário registrado com esse nome.")
+        if senha: #senha vazia = manter a atual
+            novo_hash = funcionario.alterar_senha(senha)
+        #2° so depois grava no banco
+        if nome is not None:
+            self.__funcionario_dao.atualizar_nome(funcionario.nome, id)
+        if novo_hash is not None:
+            self.__funcionario_dao.atualizar_senha(novo_hash, id)
 
     def buscar(self, id=None, nome=None) -> Funcionario:
         for funcionario in self.__funcionario_dao.listar():

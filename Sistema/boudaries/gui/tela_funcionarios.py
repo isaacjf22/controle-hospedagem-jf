@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget , QTableWidget , QLabel, QAbstractItemView, QPushButton , QHBoxLayout, QVBoxLayout, QHeaderView, QMessageBox , QTableWidgetItem
 from PySide6.QtCore import Qt, Signal
 
-from gui.dialogo_funcionario import DialogoFuncionario
+from boudaries.gui.dialogo_funcionario import DialogoFuncionario
 
 
 
@@ -9,9 +9,10 @@ from gui.dialogo_funcionario import DialogoFuncionario
 class TelaFuncionario(QWidget):
     voltar = Signal() #sinais do q ocorre nessa janela 
 
-    def __init__(self, ctl_funcionario):
+    def __init__(self, ctl_funcionario, ctl_login):
         super().__init__()
         self.__ctl_funcionario = ctl_funcionario
+        self.__ctl_login = ctl_login #para saber quem esta logado
         self.resize(1100,650)
         self.setMinimumSize(900,550)
         self.setWindowTitle("HOSPEDAGEM JF - GERENCIAMENTO FUNCIONÁRIOS")
@@ -71,7 +72,11 @@ class TelaFuncionario(QWidget):
         if id is None:
             QMessageBox.warning(self,"Aviso","Selecione um funcionário")
             return
-        funcionario = self.__ctl_funcionario.buscar(id)
+        try:
+            funcionario = self.__ctl_funcionario.buscar(id)
+        except ValueError as e:
+            QMessageBox.critical(self, "Erro", str(e))
+            return
         dialogo = DialogoFuncionario(self.__ctl_funcionario,self,funcionario=funcionario)
         if dialogo.exec():
             self.atualizar_lista()
@@ -80,6 +85,10 @@ class TelaFuncionario(QWidget):
         id = self.id_selecionado()
         if id is None:
             QMessageBox.warning(self,"Aviso","Selecione um funcionário")
+            return
+        logado = self.__ctl_login.funcionarioLogado
+        if logado is not None and logado.id == id:
+            QMessageBox.warning(self, "Aviso", "Você não pode remover o próprio usuário.")
             return
         resposta = QMessageBox.question(self, "Confirmar", "Remover esse funcionário?")
         if resposta != QMessageBox.StandardButton.Yes:

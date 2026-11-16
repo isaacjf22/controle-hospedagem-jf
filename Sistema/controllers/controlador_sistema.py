@@ -48,13 +48,13 @@ class ControladorSistema:
 
         senha = os.getenv("ADMIN_SENHA")
         if not senha:
-            print("Define uma senha para o admin no .env, como primeiro acesso.")
+            sys.exit("Defina ADMIN_NOME, ADMIN_CPF e ADMIN_SENHA no .env antes do primeiro acesso.")
         ctl_funcionario.garantir_primeiro_acesso(
             os.getenv("ADMIN_NOME"), os.getenv("ADMIN_CPF"), senha
         )
 
         tela_cliente = TelaCliente(ctl_cliente)
-        tela_funcionario = TelaFuncionario(ctl_funcionario)
+        tela_funcionario = TelaFuncionario(ctl_funcionario, ctl_login)
         tela_checkin = TelaCheckin(ctl_hospedagem, ctl_quarto, ctl_cliente)
         tela_limpeza = TelaLimpeza(ctl_quarto)
         tela_hospedagem = TelaHospedagem(ctl_hospedagem, tela_cliente, tela_funcionario,
