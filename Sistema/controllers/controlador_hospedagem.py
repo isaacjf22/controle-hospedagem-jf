@@ -36,10 +36,10 @@ class ControladorHospedagem:
         return hospedagem.gerar_comprovante()
 
     def realizar_checkout(self, idHospedagem) -> ExtratoConta:
-        hospedagem = self.__buscar_hospedagem(idHospedagem)
+        hospedagem = self.buscar_hospedagem(idHospedagem)
         quarto = hospedagem.quarto #pegar o tipo de quarto 
         dias = hospedagem.finalizar()
-        total = self.__calcular_total(idHospedagem,quarto, dias)
+        total = self.calcular_total(idHospedagem,quarto, dias)
         hospedagem.definir_total(total)
         self.__hospedagem_dao.check_out(idHospedagem,hospedagem.saida,hospedagem.valorTotal) #segue a ordem do caso de uso
         self.__ctlQuarto.realizar_limpeza(quarto.numeroQuarto)
@@ -47,11 +47,11 @@ class ControladorHospedagem:
     
         #consumo 
     def adicionar_consumo(self, idHospedagem ,nome, quantidade , valorUnitario):
-        hospedagem = self.__buscar_hospedagem(idHospedagem)
+        hospedagem = self.buscar_hospedagem(idHospedagem)
         gasto = Gasto(nome,idHospedagem,valorUnitario,quantidade)
         self.__gasto_dao.inserir(gasto)
 
-    def __calcular_total(self, idHospedagem, quarto, dias):
+    def calcular_total(self, idHospedagem, quarto, dias):
         total = 0 
         total += float(self.__gasto_dao.calcular_total(idHospedagem)) #itens
         total += quarto.calcular_diaria(dias)
@@ -62,7 +62,7 @@ class ControladorHospedagem:
         #for hospedagem in self.__hospedagensAtivas:
          #   print(f"{hospedagem.id}) QUARTO: {hospedagem.quarto.numeroQuarto} / CLIENTE: {hospedagem.cliente.nome}")
 
-    def __buscar_hospedagem(self, idHospedagem):
+    def buscar_hospedagem(self, idHospedagem):
         for hospedagem in self.__hospedagem_dao.listar():
             if hospedagem.id == idHospedagem:
                 return hospedagem

@@ -20,7 +20,7 @@ class ControladorQuarto:
     def buscar_quarto(self, numeroQuarto): #retonar um quarto
         quarto = self.__quarto_dao.buscar_quarto(numeroQuarto)
         if quarto is None:
-             raise ValueError("Quarto não encontrado.")
+             raise ValueError("Quarto não encontrado.") 
         return quarto
 
     def __verificarLivre(self) -> bool: #verificar se tem quartos livres

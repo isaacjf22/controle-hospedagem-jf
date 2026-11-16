@@ -19,6 +19,7 @@ class TelaFuncionario(QWidget):
         #TOP
         self.textoTop = QLabel("GERENCIAMENTO FUNCIONÁRIOS")
         self.textoTop.setStyleSheet("font-size: 22px; font-weight: bold;")
+        self.textoTop.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         #LISTA
         self.lista = QTableWidget(0, 2) # quantidade de linhas e colunas ao criar 

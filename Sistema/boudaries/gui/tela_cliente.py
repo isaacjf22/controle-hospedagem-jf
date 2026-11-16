@@ -9,7 +9,7 @@ from controllers.controlador_cliente import ControladorCliente
 
 
 class TelaCliente(QWidget):
-    voltar = Signal() #sinais do q ocorre nessa janela 
+    voltar = Signal() #sinais do q ocorre nessa janela , criação de um connect 
 
     def __init__(self, ctl_cliente : ControladorCliente):
         super().__init__()
@@ -21,7 +21,7 @@ class TelaCliente(QWidget):
         #TOP
         self.textoTop = QLabel("GERENCIAMENTO CLIENTES")
         self.textoTop.setStyleSheet("font-size: 22px; font-weight: bold;")
-
+        self.textoTop.setAlignment(Qt.AlignmentFlag.AlignCenter) 
         #LISTA
         self.lista = QTableWidget(0, 2) # quantidade de linhas e colunas ao criar 
         self.lista.setHorizontalHeaderLabels(["Nome", "CPF"])
@@ -94,7 +94,7 @@ class TelaCliente(QWidget):
 
     def closeEvent(self, evento): #roda sempre q a janela for fechada no X e etc  #função do Qt que tornasse possivel modificar 
         self.voltar.emit()
-        evento.accept()
+        evento.accept() #essa função esta personalizada 
 
 
     def atualizar_lista(self):
